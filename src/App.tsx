@@ -10,6 +10,10 @@ import BusinessInfo from './pages/BusinessInfo';
 import Terms from './pages/Terms';
 import ConnectServices from './pages/ConnectServices';
 import Analyzing from './pages/Analyzing';
+import Home from './pages/Home';
+import Campaigns from './pages/Campaigns';
+import Analytics from './pages/Analytics';
+import Profile from './pages/Profile';
 
 const queryClient = new QueryClient();
 
@@ -18,6 +22,10 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Routes>
         <Route path="/" element={<Onboarding />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/campaigns" element={<Campaigns />} />
+        <Route path="/analytics" element={<Analytics />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/welcome" element={<Welcome />} />
         <Route path="/business-info" element={<BusinessInfo />} />
         <Route path="/terms" element={<Terms />} />
