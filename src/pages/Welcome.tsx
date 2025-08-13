@@ -12,7 +12,7 @@ const Welcome: React.FC = () => {
   };
 
   return (
-    <Layout>
+    <Layout showBottomTab={false}>
       <div className="flex flex-col flex-1 px-6 pt-16">
         {/* 텍스트 영역 */}
         <div className="mb-12">

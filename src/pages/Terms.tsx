@@ -61,7 +61,7 @@ const Terms: React.FC = () => {
   const isFormValid = agreements.terms && agreements.privacy;
 
   return (
-    <Layout className={showTermsModal || showPrivacyModal || showMarketingModal ? 'relative' : ''}>
+    <Layout showBottomTab={false} className={showTermsModal || showPrivacyModal || showMarketingModal ? 'relative' : ''}>
       {showTermsModal && (
         <div className="absolute inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center px-6">
           <div className="bg-white rounded-2xl p-6 w-full max-w-md max-h-[80vh] overflow-y-auto">

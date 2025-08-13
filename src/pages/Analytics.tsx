@@ -149,36 +149,48 @@ const Analytics: React.FC = () => {
 
         {/* Period Tabs */}
         <div className="px-4 py-4 bg-white border-b border-gray-100">
-          <div className="flex space-x-2">
+          <div className="flex justify-center items-center space-x-4">
             <button
               onClick={() => setSelectedPeriod('week')}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                selectedPeriod === 'week'
-                  ? 'bg-yellow-400 text-black'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
+              className={selectedPeriod === 'week' ? '' : ''}
             >
-              최근 7일
+              {selectedPeriod === 'week' ? (
+                <div data-property-1="true" className="w-20 px-4 py-1.5 bg-yellow-400 rounded-[200px] shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] inline-flex justify-center items-center gap-2 overflow-hidden">
+                  <div className="text-center justify-start text-white text-xs font-medium font-['Pretendard'] leading-none">최근 7일</div>
+                </div>
+              ) : (
+                <div data-property-1="false" className="w-20 px-4 py-1.5 bg-neutral-100 rounded-[200px] shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] inline-flex justify-center items-center gap-2 overflow-hidden">
+                  <div className="text-center justify-start text-neutral-500 text-xs font-medium font-['Pretendard'] leading-none">최근 7일</div>
+                </div>
+              )}
             </button>
             <button
               onClick={() => setSelectedPeriod('thisMonth')}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                selectedPeriod === 'thisMonth'
-                  ? 'bg-yellow-400 text-black'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
+              className={selectedPeriod === 'thisMonth' ? '' : ''}
             >
-              이번 달
+              {selectedPeriod === 'thisMonth' ? (
+                <div data-property-1="true" className="w-20 px-4 py-1.5 bg-yellow-400 rounded-[200px] shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] inline-flex justify-center items-center gap-2 overflow-hidden">
+                  <div className="text-center justify-start text-white text-xs font-medium font-['Pretendard'] leading-none">이번 달</div>
+                </div>
+              ) : (
+                <div data-property-1="false" className="w-20 px-4 py-1.5 bg-neutral-100 rounded-[200px] shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] inline-flex justify-center items-center gap-2 overflow-hidden">
+                  <div className="text-center justify-start text-neutral-500 text-xs font-medium font-['Pretendard'] leading-none">이번 달</div>
+                </div>
+              )}
             </button>
             <button
               onClick={() => setSelectedPeriod('lastMonth')}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                selectedPeriod === 'lastMonth'
-                  ? 'bg-yellow-400 text-black'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
+              className={selectedPeriod === 'lastMonth' ? '' : ''}
             >
-              저번 달
+              {selectedPeriod === 'lastMonth' ? (
+                <div data-property-1="true" className="w-20 px-4 py-1.5 bg-yellow-400 rounded-[200px] shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] inline-flex justify-center items-center gap-2 overflow-hidden">
+                  <div className="text-center justify-start text-white text-xs font-medium font-['Pretendard'] leading-none">저번 달</div>
+                </div>
+              ) : (
+                <div data-property-1="false" className="w-20 px-4 py-1.5 bg-neutral-100 rounded-[200px] shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] inline-flex justify-center items-center gap-2 overflow-hidden">
+                  <div className="text-center justify-start text-neutral-500 text-xs font-medium font-['Pretendard'] leading-none">저번 달</div>
+                </div>
+              )}
             </button>
           </div>
         </div>

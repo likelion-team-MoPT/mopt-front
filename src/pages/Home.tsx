@@ -7,8 +7,8 @@ const Home: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <Layout>
-      <div className="min-h-screen bg-gray-50">
+    <Layout showBottomTab={false}>
+      <div className="w-[375px] mx-auto min-h-screen bg-gray-50">
         {/* Header */}
         <div className="flex justify-between items-center px-4 py-3 bg-white">
           <div className="w-8 h-8 flex items-center justify-center">
@@ -25,7 +25,9 @@ const Home: React.FC = () => {
         <div className="px-4 py-6 bg-gradient-to-r from-yellow-50 via-yellow-50 to-orange-50 relative overflow-hidden">
           <div className="relative z-10">
             <div className="justify-start text-neutral-900 text-3xl font-bold font-['Pretendard'] leading-10">이제 마케팅은<br/>모피티에게 맡기세요.</div>
-            <div className="justify-start text-neutral-900 text-base font-normal font-['Pretendard'] leading-normal">가장 효과적인 AI 마케팅 솔루션</div>
+            <p className="text-sm text-gray-600 mb-4">
+              가성 효과적인 AI 마케팅 솔루션
+            </p>
             <div data-property-1="true" className="size- px-4 py-1.5 bg-yellow-400 rounded-[200px] shadow-[0px_4px_8px_0px_rgba(18,18,18,0.12)] inline-flex justify-center items-center gap-2 overflow-hidden">
               <div className="text-center justify-start text-white text-base font-semibold font-['Pretendard'] leading-normal">내 매출 확인하기</div>
             </div>
@@ -76,7 +78,7 @@ const Home: React.FC = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
               </svg>
             </div>
-            <span className="text-xs text-gray-600 font-medium">광고업</span>
+            <span className="text-xs text-gray-600 font-medium">캠페인</span>
           </div>
         </div>
 

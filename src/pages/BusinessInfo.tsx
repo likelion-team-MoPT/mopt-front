@@ -48,7 +48,7 @@ const BusinessInfo: React.FC = () => {
   const isFormValid = formData.name && formData.category && formData.location;
 
   return (
-    <Layout>
+    <Layout showBottomTab={false}>
       <div className="flex flex-col flex-1 px-6 pt-4">
         <div className="flex justify-between items-center mb-8">
           <span className="text-sm text-gray-500">1 / 3</span>
