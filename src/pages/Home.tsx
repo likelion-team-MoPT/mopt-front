@@ -7,16 +7,16 @@ const Home: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <Layout>
-      <div className="min-h-screen bg-gray-50">
+    <Layout showBottomTab={false}>
+      <div className="w-[375px] mx-auto min-h-screen bg-gray-50">
         {/* Header */}
         <div className="flex justify-between items-center px-4 py-3 bg-white">
           <div className="w-8 h-8 flex items-center justify-center">
             <img src={iconSvg} alt="MoPT Logo" className="w-8 h-8" />
           </div>
           <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-            <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            <svg width="16" height="16" viewBox="0 0 24 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fillRule="evenodd" clipRule="evenodd" d="M23.2569 21.1875C21.5911 18.3077 19.0241 16.2427 16.0283 15.2637C19.0741 13.4505 20.5332 9.82578 19.5929 6.40805C18.6526 2.99031 15.5447 0.622024 12 0.622024C8.45528 0.622024 5.34742 2.99031 4.40712 6.40805C3.46682 9.82578 4.92586 13.4505 7.97172 15.2637C4.97594 16.2416 2.40891 18.3066 0.743125 21.1875C0.576821 21.4587 0.570782 21.7987 0.727353 22.0756C0.883924 22.3525 1.17844 22.5226 1.49653 22.5199C1.81462 22.5172 2.10617 22.342 2.25797 22.0625C4.31859 18.5012 7.96078 16.375 12 16.375C16.0392 16.375 19.6814 18.5012 21.742 22.0625C21.8938 22.342 22.1854 22.5172 22.5035 22.5199C22.8216 22.5226 23.1161 22.3525 23.2726 22.0756C23.4292 21.7987 23.4232 21.4587 23.2569 21.1875ZM5.875 8.5C5.875 5.11726 8.61726 2.375 12 2.375C15.3827 2.375 18.125 5.11726 18.125 8.5C18.125 11.8827 15.3827 14.625 12 14.625C8.61875 14.6214 5.87862 11.8812 5.875 8.5Z" fill="#637387"/>
             </svg>
           </div>
         </div>
@@ -24,15 +24,13 @@ const Home: React.FC = () => {
         {/* Main Banner */}
         <div className="px-4 py-6 bg-gradient-to-r from-yellow-50 via-yellow-50 to-orange-50 relative overflow-hidden">
           <div className="relative z-10">
-            <h1 className="text-xl font-bold text-gray-900 mb-2 leading-tight">
-              이제 마케팅은<br />모피티에게 맡기세요.
-            </h1>
+            <div className="justify-start text-neutral-900 text-3xl font-bold font-['Pretendard'] leading-10">이제 마케팅은<br/>모피티에게 맡기세요.</div>
             <p className="text-sm text-gray-600 mb-4">
               가성 효과적인 AI 마케팅 솔루션
             </p>
-            <button className="bg-yellow-400 hover:bg-yellow-500 text-black px-6 py-2.5 rounded-full text-sm font-medium shadow-sm transition-colors">
-              내 계정 확인하기
-            </button>
+            <div data-property-1="true" className="size- px-4 py-1.5 bg-yellow-400 rounded-[200px] shadow-[0px_4px_8px_0px_rgba(18,18,18,0.12)] inline-flex justify-center items-center gap-2 overflow-hidden">
+              <div className="text-center justify-start text-white text-base font-semibold font-['Pretendard'] leading-normal">내 매출 확인하기</div>
+            </div>
           </div>
           
           {/* Phone Illustration */}
@@ -80,7 +78,7 @@ const Home: React.FC = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
               </svg>
             </div>
-            <span className="text-xs text-gray-600 font-medium">광고업</span>
+            <span className="text-xs text-gray-600 font-medium">캠페인</span>
           </div>
         </div>
 
