@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Layout } from '../components/common';
+import iconSvg from '../assets/icon.svg';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -10,8 +11,8 @@ const Home: React.FC = () => {
       <div className="min-h-screen bg-gray-50">
         {/* Header */}
         <div className="flex justify-between items-center px-4 py-3 bg-white">
-          <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-lg flex items-center justify-center shadow-sm">
-            <div className="w-4 h-4 bg-white rounded-sm transform rotate-45"></div>
+          <div className="w-8 h-8 flex items-center justify-center">
+            <img src={iconSvg} alt="MoPT Logo" className="w-8 h-8" />
           </div>
           <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
             <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -225,7 +226,7 @@ const Home: React.FC = () => {
             <p className="text-sm text-gray-600 mb-4">최신 공지사항 1건</p>
             
             <button 
-              onClick={() => navigate('/notices')}
+              onClick={() => navigate('/notices/1')}
               className="flex items-center p-3 bg-yellow-100 rounded-lg w-full text-left hover:bg-yellow-200 transition-colors"
             >
               <div className="w-8 h-8 bg-yellow-400 rounded-lg flex items-center justify-center mr-3">

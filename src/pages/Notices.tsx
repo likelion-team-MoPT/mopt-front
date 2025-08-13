@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Layout } from '../components/common';
+import iconSvg from '../assets/icon.svg';
 
 interface NoticeItem {
   id: string;
@@ -69,8 +70,8 @@ const Notices: React.FC = () => {
           
           <h1 className="text-lg font-semibold text-gray-900">공지사항</h1>
           
-          <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-lg flex items-center justify-center shadow-sm">
-            <div className="w-4 h-4 bg-white rounded-sm transform rotate-45"></div>
+          <div className="w-8 h-8 flex items-center justify-center">
+            <img src={iconSvg} alt="MoPT Logo" className="w-8 h-8" />
           </div>
         </div>
 
@@ -84,12 +85,15 @@ const Notices: React.FC = () => {
           {latestNotice && (
             <div>
               <h2 className="text-lg font-semibold text-gray-900 mb-3">최신 공지사항</h2>
-              <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
+              <button
+                onClick={() => navigate(`/notices/${latestNotice.id}`)}
+                className="w-full bg-yellow-50 rounded-lg p-4 border border-yellow-200 hover:bg-yellow-100 transition-colors"
+              >
                 <div className="flex items-center">
                   <div className="w-10 h-10 bg-yellow-400 rounded-lg flex items-center justify-center mr-3">
                     <span className="text-white text-sm font-bold">N</span>
                   </div>
-                  <div className="flex-1">
+                  <div className="flex-1 text-left">
                     <div className="flex items-center mb-1">
                       <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
                       <p className="text-sm font-medium text-gray-900">{latestNotice.title}</p>
@@ -100,7 +104,7 @@ const Notices: React.FC = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </div>
-              </div>
+              </button>
             </div>
           )}
 
@@ -109,13 +113,17 @@ const Notices: React.FC = () => {
             <h2 className="text-lg font-semibold text-gray-900 mb-3">공지사항</h2>
             <div className="space-y-3">
               {regularNotices.map((notice) => (
-                <div key={notice.id} className="bg-white rounded-lg p-4 shadow-sm">
+                <button
+                  key={notice.id}
+                  onClick={() => navigate(`/notices/${notice.id}`)}
+                  className="w-full bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
+                >
                   <div className="flex items-center">
                     <div className="flex items-center flex-1">
                       {notice.isImportant && (
                         <div className="w-2 h-2 bg-yellow-400 rounded-full mr-3"></div>
                       )}
-                      <div className="flex-1">
+                      <div className="flex-1 text-left">
                         <p className="text-sm font-medium text-gray-900 mb-1">{notice.title}</p>
                         <p className="text-xs text-gray-500">{notice.date}</p>
                       </div>
@@ -124,7 +132,7 @@ const Notices: React.FC = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                   </div>
-                </div>
+                </button>
               ))}
             </div>
           </div>

@@ -15,6 +15,7 @@ import Campaigns from './pages/Campaigns';
 import Analytics from './pages/Analytics';
 import Profile from './pages/Profile';
 import Notices from './pages/Notices';
+import NoticeDetail from './pages/NoticeDetail';
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ function App() {
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/notices" element={<Notices />} />
+        <Route path="/notices/:id" element={<NoticeDetail />} />
         <Route path="/welcome" element={<Welcome />} />
         <Route path="/business-info" element={<BusinessInfo />} />
         <Route path="/terms" element={<Terms />} />
