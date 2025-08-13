@@ -1,7 +1,10 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Layout } from '../components/common';
 
 const Home: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
     <Layout>
       <div className="min-h-screen bg-gray-50">
@@ -212,11 +215,19 @@ const Home: React.FC = () => {
           <div className="bg-white rounded-lg p-4 shadow-sm">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold text-gray-900">공지사항</h3>
-              <span className="text-sm text-gray-500">더보기 &gt;</span>
+              <button 
+                onClick={() => navigate('/notices')}
+                className="text-sm text-gray-500 hover:text-gray-700"
+              >
+                더보기 &gt;
+              </button>
             </div>
             <p className="text-sm text-gray-600 mb-4">최신 공지사항 1건</p>
             
-            <div className="flex items-center p-3 bg-yellow-100 rounded-lg">
+            <button 
+              onClick={() => navigate('/notices')}
+              className="flex items-center p-3 bg-yellow-100 rounded-lg w-full text-left hover:bg-yellow-200 transition-colors"
+            >
               <div className="w-8 h-8 bg-yellow-400 rounded-lg flex items-center justify-center mr-3">
                 <span className="text-white text-xs font-bold">N</span>
               </div>
@@ -224,8 +235,13 @@ const Home: React.FC = () => {
                 <p className="text-sm font-medium text-gray-900">8월 정기 점검 안내</p>
                 <p className="text-xs text-gray-500">공지사항 2025.08.01</p>
               </div>
-              <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-            </div>
+              <div className="flex items-center">
+                <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </button>
           </div>
         </div>
       </div>
