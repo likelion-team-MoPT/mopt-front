@@ -5,11 +5,9 @@ import Button from '../components/common/Button';
 import type { ConnectData } from '../types';
 import IconSvg from '../assets/icon.svg';
 
-interface ConnectServicesProps {
-  showModal?: boolean;
-}
+interface ConnectServicesProps {}
 
-const ConnectServices: React.FC<ConnectServicesProps> = ({ showModal = false }) => {
+const ConnectServices: React.FC<ConnectServicesProps> = () => {
   const navigate = useNavigate();
   const [connections, setConnections] = useState<ConnectData>({
     posConnected: false,

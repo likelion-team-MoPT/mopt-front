@@ -7,8 +7,8 @@ const Home: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <Layout showBottomTab={false}>
-      <div className="w-[375px] mx-auto min-h-screen bg-gray-50">
+    <Layout>
+      <div className="min-h-screen bg-gray-50">
         {/* Header */}
         <div className="flex justify-between items-center px-4 py-3 bg-white">
           <div className="w-8 h-8 flex items-center justify-center">
