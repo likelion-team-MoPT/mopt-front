@@ -33,21 +33,7 @@ const Home: React.FC = () => {
             </div>
           </div>
           
-          {/* Phone Illustration */}
-          <div className="absolute right-6 top-6">
-            <div className="relative">
-              <div className="w-16 h-24 bg-yellow-400 rounded-lg shadow-lg flex items-center justify-center">
-                <div className="w-12 h-20 bg-black rounded-md flex items-center justify-center">
-                  <div className="w-8 h-12 bg-yellow-300 rounded-sm flex items-center justify-center">
-                    <span className="text-black text-lg font-bold">%</span>
-                  </div>
-                </div>
-              </div>
-              <div className="absolute -top-1 -right-1 w-6 h-6 bg-yellow-300 rounded-full flex items-center justify-center text-xs">
-                %
-              </div>
-            </div>
-          </div>
+          
         </div>
 
         {/* Feature Icons */}
