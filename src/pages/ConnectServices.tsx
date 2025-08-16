@@ -5,7 +5,9 @@ import Button from '../components/common/Button';
 import type { ConnectData } from '../types';
 import IconSvg from '../assets/icon.svg';
 
-interface ConnectServicesProps {}
+interface ConnectServicesProps {
+  showModal?: boolean;
+}
 
 const ConnectServices: React.FC<ConnectServicesProps> = () => {
   const navigate = useNavigate();
