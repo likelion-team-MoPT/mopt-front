@@ -16,6 +16,8 @@ import Analytics from './pages/Analytics';
 import Profile from './pages/Profile';
 import Notices from './pages/Notices';
 import NoticeDetail from './pages/NoticeDetail';
+import Insight from './pages/Insight';
+import InsightDetail from './pages/InsightDetail';
 
 const queryClient = new QueryClient();
 
@@ -36,6 +38,9 @@ function App() {
         <Route path="/connect-services" element={<ConnectServices />} />
         <Route path="/connect-services-modal" element={<ConnectServices showModal={true} />} />
         <Route path="/analyzing" element={<Analyzing />} />
+        <Route path="/insight" element={<Insight />} />
+        <Route path="/insight/:id" element={<InsightDetail />} />
+        
       </Routes>
     </QueryClientProvider>
   );
