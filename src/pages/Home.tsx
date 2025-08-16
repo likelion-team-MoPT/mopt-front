@@ -10,6 +10,7 @@ import top5Svg from '../assets/top5.svg';
 import writingBroSvg from '../assets/writing-bro.svg';
 import facebookSvg from '../assets/Facebook.svg';
 import instagramSvg from '../assets/instagram.svg';
+import profileSvg from '../assets/profile.svg';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -22,21 +23,8 @@ const Home: React.FC = () => {
           <div className="w-8 h-8 flex items-center justify-center">
             <img src={iconSvg} alt="MoPT Logo" className="w-8 h-8" />
           </div>
-          <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 23"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M23.2569 21.1875C21.5911 18.3077 19.0241 16.2427 16.0283 15.2637C19.0741 13.4505 20.5332 9.82578 19.5929 6.40805C18.6526 2.99031 15.5447 0.622024 12 0.622024C8.45528 0.622024 5.34742 2.99031 4.40712 6.40805C3.46682 9.82578 4.92586 13.4505 7.97172 15.2637C4.97594 16.2416 2.40891 18.3066 0.743125 21.1875C0.576821 21.4587 0.570782 21.7987 0.727353 22.0756C0.883924 22.3525 1.17844 22.5226 1.49653 22.5199C1.81462 22.5172 2.10617 22.342 2.25797 22.0625C4.31859 18.5012 7.96078 16.375 12 16.375C16.0392 16.375 19.6814 18.5012 21.742 22.0625C21.8938 22.342 22.1854 22.5172 22.5035 22.5199C22.8216 22.5226 23.1161 22.3525 23.2726 22.0756C23.4292 21.7987 23.4232 21.4587 23.2569 21.1875ZM5.875 8.5C5.875 5.11726 8.61726 2.375 12 2.375C15.3827 2.375 18.125 5.11726 18.125 8.5C18.125 11.8827 15.3827 14.625 12 14.625C8.61875 14.6214 5.87862 11.8812 5.875 8.5Z"
-                fill="#637387"
-              />
-            </svg>
+          <div className="w-8 h-8 flex items-center justify-center">
+            <img src={profileSvg} alt="Profile" className="w-5 h-5" />
           </div>
         </div>
 
@@ -307,8 +295,8 @@ const Home: React.FC = () => {
                   </div>
                 </div>
                 <img
-                  src={instagramSvg}
-                  alt="Instagram"
+                  src={facebookSvg}
+                  alt="Facebook"
                   className="w-8 h-8 absolute bottom-4 right-4"
                 />
               </div>
@@ -324,12 +312,12 @@ const Home: React.FC = () => {
                         ROAS
                       </div>
                     </div>
-                    <div className="text-white text-[28px] font-bold">328%</div>
+                    <div className="text-white text-[28px] font-bold">145%</div>
                   </div>
                 </div>
                 <img
-                  src={facebookSvg}
-                  alt="Facebook"
+                  src={instagramSvg}
+                  alt="Instagram"
                   className="w-8 h-8 absolute bottom-4 right-4"
                 />
               </div>
@@ -338,48 +326,72 @@ const Home: React.FC = () => {
         </div>
 
         {/* Announcements */}
-        <div className="px-4 py-6 pb-24">
-          <div className="bg-white rounded-lg p-4 shadow-sm">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">공지사항</h3>
-              <button
-                onClick={() => navigate('/notices')}
-                className="text-sm text-gray-500 hover:text-gray-700"
-              >
-                더보기 &gt;
-              </button>
+        <div className="px-4 py-6">
+          <div className="p-4">
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-semibold text-gray-900">공지사항</h2>
+              <span className="text-sm text-gray-500">더보기 &gt;</span>
             </div>
-            <p className="text-sm text-gray-600 mb-4">최신 공지사항 1건</p>
+
+            <p className="flex items-baseline text-md text-gray-900 py-2">
+              <span>최신 공지사항</span>
+              <span className="ml-1 rounded-full bg-yellow-50 px-2 py-0.5 text-base font-semibold text-red-400">
+                1건
+              </span>
+            </p>
 
             <button
-              onClick={() => navigate('/notices/1')}
-              className="flex items-center p-3 bg-yellow-100 rounded-lg w-full text-left hover:bg-yellow-200 transition-colors"
+              // 실제로는 useNavigate를 사용해 상세 페이지로 이동시킵니다.
+              // onClick={() => navigate('/notices/1')}
+              className="flex w-full items-center gap-4 rounded-xl bg-yellow-50 p-4 text-left shadow-sm transition-colors hover:bg-yellow-100"
             >
-              <div className="w-8 h-8 bg-yellow-400 rounded-lg flex items-center justify-center mr-3">
-                <span className="text-white text-xs font-bold">N</span>
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-900">
-                  8월 정기 점검 안내
-                </p>
-                <p className="text-xs text-gray-500">공지사항 2025.08.01</p>
-              </div>
-              <div className="flex items-center">
-                <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+              {/* 왼쪽 아이콘 */}
+              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-yellow-400">
+                {/* 아이콘 SVG 코드 */}
                 <svg
-                  className="w-4 h-4 text-gray-400"
+                  className="h-6 w-6 text-white"
+                  width="21"
+                  height="19"
+                  viewBox="0 0 21 19"
                   fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M20.5 9.03418C20.4974 6.54997 18.4842 4.53676 16 4.53418H12.2688C11.9959 4.51824 7.24187 4.18355 2.71469 0.38668C2.26836 0.0118277 1.64529 -0.0705311 1.11689 0.175479C0.588491 0.421489 0.250443 0.95132 0.25 1.53418V16.5342C0.250079 17.1172 0.58799 17.6474 1.11646 17.8936C1.64494 18.1399 2.26823 18.0576 2.71469 17.6826C6.25562 14.7126 9.93344 13.8614 11.5 13.6232V16.597C11.4994 17.099 11.7499 17.5681 12.1675 17.8467L13.1987 18.5339C13.6032 18.8038 14.1134 18.861 14.5676 18.6872C15.0217 18.5134 15.3635 18.1302 15.4844 17.6592L16.5878 13.5004C18.8269 13.2025 20.4995 11.293 20.5 9.03418ZM1.75 16.5276V1.53418C5.76344 4.90074 9.87156 5.75293 11.5 5.96293V12.1017C9.87344 12.3154 5.76625 13.1657 1.75 16.5276ZM14.0312 17.2776V17.2879L13 16.6007V13.5342H15.025L14.0312 17.2776ZM16 12.0342H13V6.03418H16C17.6569 6.03418 19 7.37733 19 9.03418C19 10.691 17.6569 12.0342 16 12.0342Z"
+                    fill="currentColor"
                   />
                 </svg>
               </div>
+
+              {/* 중간 텍스트 영역 */}
+              <div className="flex-1">
+                <p className="text-[10px] text-gray-500">공지일 2025.08.01.</p>
+                <div className="flex items-center gap-1">
+                  <span className="rounded-full bg-red-400 px-1 py-px text-[10px] font-medium text-yellow-50">
+                    N
+                  </span>
+                  <p className="text-base font-semibold text-gray-900">
+                    8월 정기 점검 안내
+                  </p>
+                </div>
+              </div>
+
+              {/* 오른쪽 화살표 아이콘 */}
+              <svg
+                className="h-5 w-5 flex-shrink-0 text-gray-400"
+                width="18"
+                height="19"
+                viewBox="0 0 18 19"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M9.4501 9.78379L6.5251 6.85879C6.3876 6.72129 6.31885 6.54629 6.31885 6.33379C6.31885 6.12129 6.3876 5.94629 6.5251 5.80879C6.6626 5.67129 6.8376 5.60254 7.0501 5.60254C7.2626 5.60254 7.4376 5.67129 7.5751 5.80879L11.0251 9.25879C11.1001 9.33379 11.1532 9.41504 11.1845 9.50254C11.2157 9.59004 11.2313 9.68379 11.2313 9.78379C11.2313 9.88379 11.2157 9.97754 11.1845 10.065C11.1532 10.1525 11.1001 10.2338 11.0251 10.3088L7.5751 13.7588C7.4376 13.8963 7.2626 13.965 7.0501 13.965C6.8376 13.965 6.6626 13.8963 6.5251 13.7588C6.3876 13.6213 6.31885 13.4463 6.31885 13.2338C6.31885 13.0213 6.3876 12.8463 6.5251 12.7088L9.4501 9.78379Z"
+                  fill="currentColor"
+                />
+              </svg>
             </button>
           </div>
         </div>
