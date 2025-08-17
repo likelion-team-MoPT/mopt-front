@@ -27,7 +27,7 @@ interface RecommendedStrategy {
 const mockInsightData = {
   newStrategies: [
     {
-      id: 1,
+      id: 'insight_001',
       icon: '📈',
       title: '주말 점심 할인 캠페인 제안',
       subtitle: '최근 3주간 점심 시간대 매출 상승',
@@ -35,7 +35,7 @@ const mockInsightData = {
       isNew: true,
     },
     {
-      id: 2,
+      id: 'insight_002',
       icon: '📣',
       title: 'SNS 광고 예산 확대 필요',
       subtitle: 'SNS 유입 전환율이 평균보다 2배 높음',
@@ -43,7 +43,7 @@ const mockInsightData = {
       isNew: true,
     },
     {
-      id: 3,
+      id: 'insight_003',
       icon: '🥐',
       title: '브런치 세트 프로모션 제안',
       subtitle: '브런치 키워드 상권 내 검색량 40%',
@@ -53,7 +53,7 @@ const mockInsightData = {
   ],
   recommendedStrategies: [
      {
-      id: 1,
+      id: 'insight_004', // 기존 AI 추천 전략 id는 추후 api 확인 후 수정
       icon: '🍽',
       title: '주말 저녁 방문 유도 프로모션 제안',
       tags: [
@@ -62,7 +62,7 @@ const mockInsightData = {
       ],
     },
     {
-      id: 2,
+      id: 'insight_005',
       icon: '✉️',
       title: '고객 맞춤 이메일 캠페인 제안',
       tags: [
@@ -71,7 +71,7 @@ const mockInsightData = {
       ],
     },
     {
-      id: 3,
+      id: 'insight_006',
       icon: '📱',
       title: 'SNS 이벤트 참여 유도 캠페인',
       tags: [
@@ -80,7 +80,7 @@ const mockInsightData = {
       ],
     },
     {
-      id: 4,
+      id: 'insight_007',
       icon: '📍',
       title: '신규 상권 대상 타겟 광고 전략',
       tags: [
@@ -89,7 +89,7 @@ const mockInsightData = {
       ],
     },
     {
-      id: 5,
+      id: 'insight_008',
       icon: '☕',
       title: '점심 타임 직장인 타겟 쿠폰 발송',
       tags: [
@@ -120,7 +120,7 @@ const Insight: React.FC = () => {
   return (
     <Layout showBottomTab={false}>
         {/* Header */}
-      <div className="flex items-center justify-between px-7 py-4 sticky top-0 z-10 border-b border-gray-100">
+      <div className="flex items-center justify-between px-7 py-4 z-10 border-b border-gray-100">
           <button onClick={() => navigate(-1)} className="flex items-center justify-center w-8 h-8">
             <img src={backIcon} alt="뒤로 가기" className="w-6 h-6" />
           </button>
