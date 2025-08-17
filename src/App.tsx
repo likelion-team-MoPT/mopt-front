@@ -1,5 +1,3 @@
-
-
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Routes, Route } from 'react-router-dom';
 
@@ -12,6 +10,7 @@ import ConnectServices from './pages/ConnectServices';
 import Analyzing from './pages/Analyzing';
 import Home from './pages/Home';
 import Campaigns from './pages/Campaigns';
+import CampaignDetail from './pages/CampaignDetail';
 import Analytics from './pages/Analytics';
 import Profile from './pages/Profile';
 import Notices from './pages/Notices';
@@ -28,6 +27,7 @@ function App() {
         <Route path="/" element={<Onboarding />} />
         <Route path="/home" element={<Home />} />
         <Route path="/campaigns" element={<Campaigns />} />
+        <Route path="/campaigns/:id" element={<CampaignDetail />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/notices" element={<Notices />} />
@@ -36,11 +36,13 @@ function App() {
         <Route path="/business-info" element={<BusinessInfo />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/connect-services" element={<ConnectServices />} />
-        <Route path="/connect-services-modal" element={<ConnectServices showModal={true} />} />
+        <Route
+          path="/connect-services-modal"
+          element={<ConnectServices showModal={true} />}
+        />
         <Route path="/analyzing" element={<Analyzing />} />
         <Route path="/insight" element={<Insight />} />
         <Route path="/insight/:id" element={<InsightDetail />} />
-        
       </Routes>
     </QueryClientProvider>
   );
