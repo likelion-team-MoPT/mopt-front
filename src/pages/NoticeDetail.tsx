@@ -39,7 +39,7 @@ const NoticeDetail: React.FC = () => {
 앞으로도 더 나은 환경을 제공할 수 있도록 노력하겠습니다.
 
 감사합니다.`,
-      isNew: true
+      isNew: true,
     },
     '2': {
       id: '2',
@@ -58,7 +58,7 @@ const NoticeDetail: React.FC = () => {
 
 더 나은 서비스를 제공하기 위해 지속적으로 개선해나가겠습니다.
 
-감사합니다.`
+감사합니다.`,
     },
     '3': {
       id: '3',
@@ -77,7 +77,7 @@ const NoticeDetail: React.FC = () => {
 
 자세한 내용은 홈페이지에서 확인하실 수 있습니다.
 
-감사합니다.`
+감사합니다.`,
     },
     '4': {
       id: '4',
@@ -94,7 +94,7 @@ const NoticeDetail: React.FC = () => {
 
 이용에 불편을 드려 죄송합니다.
 
-감사합니다.`
+감사합니다.`,
     },
     '5': {
       id: '5',
@@ -111,7 +111,7 @@ const NoticeDetail: React.FC = () => {
 
 양해 부탁드립니다.
 
-감사합니다.`
+감사합니다.`,
     },
     '6': {
       id: '6',
@@ -128,8 +128,8 @@ const NoticeDetail: React.FC = () => {
 
 이용에 참고 부탁드립니다.
 
-감사합니다.`
-    }
+감사합니다.`,
+    },
   };
 
   const notice = id ? noticeDetails[id] : null;
@@ -139,7 +139,9 @@ const NoticeDetail: React.FC = () => {
       <Layout showBottomTab={false}>
         <div className="min-h-screen bg-gray-50 flex items-center justify-center">
           <div className="text-center">
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">공지사항을 찾을 수 없습니다</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-2">
+              공지사항을 찾을 수 없습니다
+            </h2>
             <button
               onClick={() => navigate('/notices')}
               className="text-yellow-500 hover:text-yellow-600"
@@ -156,20 +158,30 @@ const NoticeDetail: React.FC = () => {
     <Layout showBottomTab={false}>
       <div className="min-h-screen bg-gray-50">
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-4 bg-white">
+        <div className="flex items-center justify-between px-4 py-4 bg-zinc-50">
           <button
             onClick={() => navigate(-1)}
             className="flex items-center justify-center w-8 h-8"
           >
-            <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            <svg
+              className="w-6 h-6 text-gray-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
             </svg>
           </button>
-          
+
           <h1 className="text-lg font-semibold text-gray-900">공지사항</h1>
-          
-          <div className="w-8 h-8 flex items-center justify-center">
-            <img src={iconSvg} alt="MoPT Logo" className="w-8 h-8" />
+
+          <div className="w-9 h-9 flex items-center justify-center">
+            <img src={iconSvg} alt="MoPT Logo" className="w-9 h-9" />
           </div>
         </div>
 
@@ -178,14 +190,16 @@ const NoticeDetail: React.FC = () => {
           {/* Title Section */}
           <div className="bg-white rounded-lg p-6 shadow-sm mb-4">
             <div className="flex items-center mb-4">
-              <h2 className="text-xl font-bold text-gray-900 flex-1">{notice.title}</h2>
+              <h2 className="text-xl font-bold text-gray-900 flex-1">
+                {notice.title}
+              </h2>
               {notice.isNew && (
                 <div className="w-5 h-5 bg-red-500 rounded-full flex items-center justify-center ml-2">
                   <span className="text-white text-xs font-bold">!</span>
                 </div>
               )}
             </div>
-            
+
             <div className="flex items-center text-sm text-gray-500">
               <span className="mr-4">{notice.category}</span>
               <span>{notice.date}</span>
