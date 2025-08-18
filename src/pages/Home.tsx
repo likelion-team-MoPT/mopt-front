@@ -19,7 +19,7 @@ const Home: React.FC = () => {
     <Layout showBottomTab={false}>
       <div className="min-h-screen bg-gray-50">
         {/* Header */}
-        <div className="flex justify-between items-center px-4 py-3 bg-white">
+        <div className="flex justify-between items-center px-4 py-3">
           <div className="w-8 h-8 flex items-center justify-center">
             <img src={iconSvg} alt="MoPT Logo" className="w-8 h-8" />
           </div>
@@ -66,7 +66,11 @@ const Home: React.FC = () => {
             onClick={() => navigate('/analytics')}
           />
           <FeatureIcon image={fantasySvg} label="AI 인사이트" />
-          <FeatureIcon image={webadSvg} label="캠페인" />
+          <FeatureIcon
+            image={webadSvg}
+            label="캠페인"
+            onClick={() => navigate('/campaigns')}
+          />
         </div>
 
         {/* Monthly Sales */}

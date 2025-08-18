@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Layout } from '../components/common';
-import iconSvg from '../assets/icon.svg';
+import { Layout, Header } from '../components/common';
 
 type PeriodType = 'week' | 'thisMonth' | 'lastMonth';
 
@@ -190,32 +189,7 @@ const Analytics: React.FC = () => {
     <Layout showBottomTab={false}>
       <div className="min-h-screen bg-zinc-50">
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-4 bg-zinc-50">
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center justify-center w-8 h-8"
-          >
-            <svg
-              className="w-6 h-6 text-gray-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </button>
-
-          <h1 className="text-lg font-semibold text-gray-900">리포트</h1>
-
-          <div className="w-9 h-9 flex items-center justify-center">
-            <img src={iconSvg} alt="MoPT Logo" className="w-9 h-9" />
-          </div>
-        </div>
+        <Header title="리포트" backgroundColor="bg-white" />
 
         {/* Period Tabs */}
         <div className="px-4 py-4 bg-zinc-50">
@@ -295,7 +269,7 @@ const Analytics: React.FC = () => {
           </div>
         </div>
 
-        <div className="px-4 py-6 space-y-6">
+        <div className="px-7 py-6 space-y-6">
           {/* Overall Performance */}
           <div>
             <h2 className="text-lg font-semibold text-gray-900 mb-4">
