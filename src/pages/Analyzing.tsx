@@ -7,9 +7,9 @@ const Analyzing: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // 3초 후 Welcome 페이지로 이동 (분석 완료 후)
+    // 3초 후 Home 페이지로 이동 (분석 완료 후)
     const timer = setTimeout(() => {
-      navigate('/welcome');
+      navigate('/home');
     }, 3000);
 
     return () => clearTimeout(timer);
