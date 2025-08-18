@@ -23,7 +23,10 @@ const Home: React.FC = () => {
           <div className="w-8 h-8 flex items-center justify-center">
             <img src={iconSvg} alt="MoPT Logo" className="w-8 h-8" />
           </div>
-          <div className="w-8 h-8 flex items-center justify-center">
+          <div 
+            className="w-8 h-8 flex items-center justify-center cursor-pointer"
+            onClick={() => navigate('/profile')}
+          >
             <img src={profileSvg} alt="Profile" className="w-5 h-5" />
           </div>
         </div>
