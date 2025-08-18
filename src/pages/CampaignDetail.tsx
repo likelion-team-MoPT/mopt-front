@@ -1,9 +1,8 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Layout } from '../components/common';
+import { Layout, Header } from '../components/common';
 import facebookSvg from '../assets/Facebook.svg';
 import instagramSvg from '../assets/instagram.svg';
-import iconSvg from '../assets/icon.svg';
 
 interface CampaignDetail {
   id: number;
@@ -101,85 +100,64 @@ const CampaignDetailPage: React.FC = () => {
     <Layout showBottomTab={false}>
       <div className="min-h-screen bg-gray-50">
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-4 bg-zinc-50">
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center justify-center w-8 h-8"
-          >
-            <svg
-              className="w-6 h-6 text-gray-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </button>
+        <Header title="캠페인" backgroundColor="bg-zinc-50" />
 
-          <h1 className="text-lg font-semibold text-gray-900">캠페인</h1>
-
-          <div className="w-9 h-9 flex items-center justify-center">
-            <img src={iconSvg} alt="MoPT Logo" className="w-9 h-9" />
-          </div>
-        </div>
-
-        <div className="p-4 space-y-6">
+        <div className="p-7">
           {/* Campaign Info */}
-          <h2 className="text-lg font-semibold text-gray-900 mb-4 ml-2">
-            캠페인 정보
-          </h2>
+          <div className="mb-4">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              캠페인 정보
+            </h2>
 
-          <div className="bg-white rounded-xl p-4">
-            <div className="mb-4">
-              <h3 className="text-base font-semibold text-gray-900 mb-2">
-                {campaignDetail.name}
-              </h3>
+            <div className="bg-white rounded-xl p-4">
+              <div className="mb-4">
+                <h3 className="text-base font-semibold text-gray-900 mb-2">
+                  {campaignDetail.name}
+                </h3>
 
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-gray-600 text-sm">상태</span>
-                  <span
-                    className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      campaignDetail.status === 'progress'
-                        ? 'bg-yellow-100 text-yellow-700'
-                        : 'bg-gray-100 text-gray-700'
-                    }`}
-                  >
-                    {campaignDetail.status === 'progress' ? '진행중' : '완료됨'}
-                  </span>
-                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600 text-sm">상태</span>
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        campaignDetail.status === 'progress'
+                          ? 'bg-yellow-100 text-yellow-700'
+                          : 'bg-gray-100 text-gray-700'
+                      }`}
+                    >
+                      {campaignDetail.status === 'progress'
+                        ? '진행중'
+                        : '완료됨'}
+                    </span>
+                  </div>
 
-                <div className="flex justify-between">
-                  <span className="text-gray-600 text-sm">기간</span>
-                  <span className="text-gray-900 text-sm">
-                    {campaignDetail.period}
-                  </span>
-                </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600 text-sm">기간</span>
+                    <span className="text-gray-900 text-sm">
+                      {campaignDetail.period}
+                    </span>
+                  </div>
 
-                <div className="flex justify-between">
-                  <span className="text-gray-600 text-sm">채널</span>
-                  <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-medium">
-                    {campaignDetail.category}
-                  </span>
-                </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600 text-sm">채널</span>
+                    <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-medium">
+                      {campaignDetail.category}
+                    </span>
+                  </div>
 
-                <div className="flex justify-between">
-                  <span className="text-gray-600 text-sm">목표</span>
-                  <span className="text-gray-900 text-sm">
-                    {campaignDetail.goal}
-                  </span>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600 text-sm">목표</span>
+                    <span className="text-gray-900 text-sm">
+                      {campaignDetail.goal}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Overall Performance */}
-          <div className="p-4">
+          <div className="py-4">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">
               전체 성과
             </h2>
@@ -213,87 +191,102 @@ const CampaignDetailPage: React.FC = () => {
           </div>
 
           {/* Daily Performance Chart */}
-          <div className="bg-white rounded-xl p-4">
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">
-              일일 캠페인 성과
-            </h2>
-            <p className="text-gray-600 text-sm mb-4">최근 30일간의 클릭수</p>
+          <div className="py-4">
+            <div className="bg-white rounded-xl p-4">
+              <h2 className="text-lg font-semibold text-gray-900 mb-2">
+                일일 캠페인 성과
+              </h2>
+              <p className="text-gray-600 text-sm mb-4">최근 30일간의 클릭수</p>
 
-            <div className="mb-4">
-              <div className="text-2xl font-bold text-gray-900">260회</div>
-              <div className="text-sm text-gray-600">
-                최근 30회 <span className="text-green-600">+15%</span>
-              </div>
-            </div>
-
-            {/* Simple Chart */}
-            <div className="h-32 flex items-end justify-between space-x-2 mb-4">
-              {campaignDetail.dailyPerformance.map((item, index) => (
-                <div key={index} className="flex flex-col items-center flex-1">
-                  <div
-                    className="bg-yellow-400 w-full rounded-t"
-                    style={{
-                      height: `${(item.value / 300) * 100}%`,
-                      minHeight: '8px',
-                    }}
-                  ></div>
-                  <div className="text-xs text-gray-500 mt-1">{item.date}</div>
+              <div className="mb-4">
+                <div className="text-2xl font-bold text-gray-900">260회</div>
+                <div className="text-sm text-gray-600">
+                  최근 30회 <span className="text-green-600">+15%</span>
                 </div>
-              ))}
+              </div>
+              {/* Simple Chart */}
+              <div className="h-32 flex items-end justify-between space-x-2 mb-4">
+                {campaignDetail.dailyPerformance.map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-col items-center flex-1"
+                  >
+                    <div
+                      className="bg-yellow-400 w-full rounded-t"
+                      style={{
+                        height: `${(item.value / 300) * 100}%`,
+                        minHeight: '8px',
+                      }}
+                    ></div>
+                    <div className="text-xs text-gray-500 mt-1">
+                      {item.date}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
           {/* Weekly Revenue */}
-          <div className="bg-white rounded-xl p-4">
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">
-              주간 매출 동향
-            </h2>
-            <p className="text-gray-600 text-sm mb-4">최근 7일간의 매출</p>
+          <div className="py-4">
+            <div className="bg-white rounded-xl p-4">
+              <h2 className="text-lg font-semibold text-gray-900 mb-2">
+                주간 매출 동향
+              </h2>
+              <p className="text-gray-600 text-sm mb-4">최근 7일간의 매출</p>
 
-            <div className="mb-4">
-              <div className="text-2xl font-bold text-gray-900">₩12,345</div>
-              <div className="text-sm text-gray-600">
-                어제 대비 <span className="text-green-600">+12%</span>
-              </div>
-            </div>
-
-            {/* Weekly Chart */}
-            <div className="h-20 flex items-end justify-between space-x-1 mb-4 bg-yellow-50 rounded p-2">
-              {campaignDetail.weeklyRevenue.map((item, index) => (
-                <div key={index} className="flex flex-col items-center flex-1">
-                  <div
-                    className="bg-yellow-400 w-full rounded-t"
-                    style={{
-                      height: `${(item.value / 2) * 100}%`,
-                      minHeight: '4px',
-                    }}
-                  ></div>
-                  <div className="text-xs text-gray-500 mt-1">{item.week}</div>
+              <div className="mb-4">
+                <div className="text-2xl font-bold text-gray-900">₩12,345</div>
+                <div className="text-sm text-gray-600">
+                  어제 대비 <span className="text-green-600">+12%</span>
                 </div>
-              ))}
+              </div>
+
+              {/* Weekly Chart */}
+              <div className="h-20 flex items-end justify-between space-x-1 mb-4 bg-yellow-50 rounded p-2">
+                {campaignDetail.weeklyRevenue.map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-col items-center flex-1"
+                  >
+                    <div
+                      className="bg-yellow-400 w-full rounded-t"
+                      style={{
+                        height: `${(item.value / 2) * 100}%`,
+                        minHeight: '4px',
+                      }}
+                    ></div>
+                    <div className="text-xs text-gray-500 mt-1">
+                      {item.week}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
           {/* Recommendation */}
-          <div className="bg-white rounded-xl p-4">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
-              추천하는 광고 소재
-            </h2>
+          <div className="py-4">
+            <div className="bg-white rounded-xl p-4">
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                추천하는 광고 소재
+              </h2>
 
-            <div className="bg-gray-100 rounded-lg h-40 mb-4 flex items-center justify-center">
-              <div className="text-gray-500 text-sm">음식 이미지</div>
-            </div>
+              <div className="bg-gray-100 rounded-lg h-40 mb-4 flex items-center justify-center">
+                <div className="text-gray-500 text-sm">음식 이미지</div>
+              </div>
 
-            <div>
-              <h3 className="text-base font-semibold text-gray-900 mb-1">
-                {campaignDetail.recommendation.title}
-              </h3>
-              <p className="text-yellow-600 text-sm font-medium mb-2">
-                {campaignDetail.recommendation.time}
-              </p>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                {campaignDetail.recommendation.description}
-              </p>
+              <div>
+                <h3 className="text-base font-semibold text-gray-900 mb-1">
+                  {campaignDetail.recommendation.title}
+                </h3>
+                <p className="text-yellow-600 text-sm font-medium mb-2">
+                  {campaignDetail.recommendation.time}
+                </p>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  {campaignDetail.recommendation.description}
+                </p>
+              </div>
             </div>
           </div>
         </div>

@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Layout } from '../components/common';
-import iconSvg from '../assets/icon.svg';
+import { Layout, Header } from '../components/common';
 import noticeIconSvg from '../assets/NoticeIcon.svg';
 
 interface NoticeItem {
@@ -59,32 +58,7 @@ const Notices: React.FC = () => {
     <Layout showBottomTab={false}>
       <div className="min-h-screen bg-gray-50">
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-4 bg-zinc-50">
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center justify-center w-8 h-8"
-          >
-            <svg
-              className="w-6 h-6 text-gray-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </button>
-
-          <h1 className="text-lg font-semibold text-gray-900">공지사항</h1>
-
-          <div className="w-9 h-9 flex items-center justify-center">
-            <img src={iconSvg} alt="MoPT Logo" className="w-9 h-9" />
-          </div>
-        </div>
+        <Header title="공지사항" />
 
         {/* Notice Count */}
         <div className="px-4 py-3 bg-zinc-50 border-b border-gray-100">
