@@ -1,9 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import iconSvg from '../../assets/icon.svg';
+import backSvg from '../../assets/back.svg';
 
 interface HeaderProps {
   title: string;
   showBackButton?: boolean;
+  showLogo?: boolean;
   backgroundColor?: string;
   textColor?: string;
   rightComponent?: React.ReactNode;
@@ -13,6 +16,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({
   title,
   showBackButton = true,
+  showLogo = true,
   backgroundColor = 'bg-white',
   textColor = 'text-gray-900',
   rightComponent,
@@ -35,19 +39,7 @@ const Header: React.FC<HeaderProps> = ({
           onClick={handleBackClick}
           className="flex items-center justify-center w-8 h-8"
         >
-          <svg
-            className="w-6 h-6 text-gray-600"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
+          <img src={backSvg} alt="Back" className="w-6 h-6" />
         </button>
       ) : (
         <div className="w-8 h-8" />
@@ -56,7 +48,11 @@ const Header: React.FC<HeaderProps> = ({
       <h1 className={`text-lg font-semibold ${textColor}`}>{title}</h1>
       
       <div className="w-8 h-8 flex items-center justify-center">
-        {rightComponent}
+        {rightComponent ? (
+          rightComponent
+        ) : showLogo ? (
+          <img src={iconSvg} alt="MoPT Logo" className="w-6 h-6" />
+        ) : null}
       </div>
     </div>
   );
