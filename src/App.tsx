@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 
 // Pages
 import Onboarding from './Onboarding';
+import Welcome from './pages/Welcome';
 import BusinessInfo from './pages/BusinessInfo';
 import Terms from './pages/Terms';
 import ConnectServices from './pages/ConnectServices';
@@ -27,6 +28,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Routes>
         <Route path="/" element={<Onboarding />} />
+        <Route path="/welcome" element={<Welcome />} />
         <Route path="/home" element={<Home />} />
         <Route path="/campaigns" element={<Campaigns />} />
         <Route path="/campaigns/:id" element={<CampaignDetail />} />

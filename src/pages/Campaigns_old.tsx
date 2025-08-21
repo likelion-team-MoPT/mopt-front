@@ -81,7 +81,32 @@ const Campaigns: React.FC = () => {
     <Layout showBottomTab={false}>
       <div className="min-h-screen bg-zinc-50">
         {/* Header */}
-        <Header title="캠페인" backgroundColor="bg-zinc-50" />
+        <div className="flex items-center justify-between px-4 py-4 bg-zinc-50">
+          <button
+            onClick={() => navigate(-1)}
+            className="flex items-center justify-center w-8 h-8"
+          >
+            <svg
+              className="w-6 h-6 text-gray-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+
+          <h1 className="text-lg font-semibold text-gray-900">캠페인</h1>
+
+          <div className="w-9 h-9 flex items-center justify-center">
+            <img src={iconSvg} alt="MoPT Logo" className="w-9 h-9" />
+          </div>
+        </div>
 
         {/* Filter Tabs */}
         <div className="px-4 py-4 bg-zinc-50">
@@ -93,22 +118,22 @@ const Campaigns: React.FC = () => {
               {selectedFilter === 'all' ? (
                 <div className="w-20 px-4 py-1.5 bg-yellow-400 rounded-[200px] shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] inline-flex justify-center items-center gap-2 overflow-hidden">
                   <div className="text-center justify-start text-white text-xs font-medium font-['Pretendard'] leading-none">
-                    전체
+                    All
                   </div>
                 </div>
               ) : (
                 <div className="w-20 px-4 py-1.5 bg-neutral-100 rounded-[200px] shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] inline-flex justify-center items-center gap-2 overflow-hidden">
                   <div className="text-center justify-start text-neutral-500 text-xs font-medium font-['Pretendard'] leading-none">
-                    전체
+                    All
                   </div>
                 </div>
               )}
             </button>
             <button
-              onClick={() => setSelectedFilter('active')}
-              className={selectedFilter === 'active' ? '' : ''}
+              onClick={() => setSelectedFilter('progress')}
+              className={selectedFilter === 'progress' ? '' : ''}
             >
-              {selectedFilter === 'active' ? (
+              {selectedFilter === 'progress' ? (
                 <div className="w-20 px-4 py-1.5 bg-yellow-400 rounded-[200px] shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] inline-flex justify-center items-center gap-2 overflow-hidden">
                   <div className="text-center justify-start text-white text-xs font-medium font-['Pretendard'] leading-none">
                     진행중
@@ -123,10 +148,10 @@ const Campaigns: React.FC = () => {
               )}
             </button>
             <button
-              onClick={() => setSelectedFilter('ended')}
-              className={selectedFilter === 'ended' ? '' : ''}
+              onClick={() => setSelectedFilter('completed')}
+              className={selectedFilter === 'completed' ? '' : ''}
             >
-              {selectedFilter === 'ended' ? (
+              {selectedFilter === 'completed' ? (
                 <div className="w-20 px-4 py-1.5 bg-yellow-400 rounded-[200px] shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] inline-flex justify-center items-center gap-2 overflow-hidden">
                   <div className="text-center justify-start text-white text-xs font-medium font-['Pretendard'] leading-none">
                     완료됨
@@ -145,57 +170,50 @@ const Campaigns: React.FC = () => {
 
         {/* Campaign List */}
         <div className="p-4 space-y-3">
-          {campaignsData && campaignsData.data.length > 0 ? (
-            campaignsData.data.map(campaign => (
-              <div
-                key={campaign.id}
-                className="bg-white rounded-xl p-4 shadow-sm cursor-pointer hover:shadow-md transition-shadow"
-                onClick={() => navigate(`/campaigns/${campaign.id}`)}
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex items-center space-x-3">
-                    <div
-                      className={`w-10 h-10 rounded-full flex items-center justify-center ${getPlatformBgColor(campaign.channel)}`}
-                    >
-                      <img
-                        src={getPlatformIcon(campaign.channel)}
-                        alt={campaign.channel}
-                        className="w-6 h-6"
-                      />
-                    </div>
-                    <div>
-                      <div className="text-gray-500 text-xs mb-1">
-                        {campaign.end_date
-                          ? `${campaign.start_date} - ${campaign.end_date}`
-                          : campaign.start_date}
-                      </div>
-                      <div className="text-gray-900 font-semibold text-base">
-                        {campaign.name}
-                      </div>
-                      <div className="text-gray-600 text-sm">
-                        ROAS {campaign.roas.toFixed(0)}% · 지출 {formatCurrency(campaign.spend)}
-                      </div>
-                    </div>
+          {filteredCampaigns.map(campaign => (
+            <div
+              key={campaign.id}
+              className="bg-white rounded-xl p-4 shadow-sm cursor-pointer hover:shadow-md transition-shadow"
+              onClick={() => navigate(`/campaigns/${campaign.id}`)}
+            >
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex items-center space-x-3">
+                  <div
+                    className={`w-10 h-10 rounded-full flex items-center justify-center ${getPlatformBgColor(campaign.platform)}`}
+                  >
+                    <img
+                      src={getPlatformIcon(campaign.platform)}
+                      alt={campaign.platform}
+                      className="w-6 h-6"
+                    />
                   </div>
-
-                  <div className="text-right">
-                    <div className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(campaign.status)}`}>
-                      {getStatusText(campaign.status)}
+                  <div>
+                    <div className="text-gray-500 text-xs mb-1">
+                      {campaign.endDate
+                        ? `${campaign.startDate} - ${campaign.endDate}`
+                        : campaign.startDate}
+                    </div>
+                    <div className="text-gray-900 font-semibold text-base">
+                      {campaign.name}
+                    </div>
+                    <div className="text-gray-600 text-sm">
+                      ROAS {campaign.roas}% · 지출{' '}
+                      {formatCurrency(campaign.revenue)}
                     </div>
                   </div>
                 </div>
+                <div
+                  className={`px-3 py-1 rounded-full text-xs font-medium ${
+                    campaign.status === 'progress'
+                      ? 'bg-yellow-100 text-yellow-700'
+                      : 'bg-gray-100 text-gray-700'
+                  }`}
+                >
+                  {campaign.status === 'progress' ? '진행중' : '완료됨'}
+                </div>
               </div>
-            ))
-          ) : (
-            <EmptyState
-              title="캠페인이 없습니다"
-              message="아직 생성된 캠페인이 없습니다."
-              action={{
-                label: "새 캠페인 만들기",
-                onClick: () => navigate('/campaigns/new')
-              }}
-            />
-          )}
+            </div>
+          ))}
         </div>
       </div>
     </Layout>
