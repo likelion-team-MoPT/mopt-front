@@ -68,7 +68,7 @@ const Home: React.FC = () => {
             label="리포트"
             onClick={() => navigate('/analytics')}
           />
-          <FeatureIcon image={fantasySvg} label="AI 인사이트" />
+          <FeatureIcon image={fantasySvg} label="AI 인사이트" onClick = {() => navigate('/insight')} />
           <FeatureIcon
             image={webadSvg}
             label="캠페인"
