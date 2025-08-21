@@ -8,6 +8,8 @@ interface HeaderProps {
   showBackButton?: boolean;
   showLogo?: boolean;
   backgroundColor?: string;
+  textColor?: string;
+  rightComponent?: React.ReactNode;
   onBackClick?: () => void;
 }
 
@@ -15,6 +17,9 @@ const Header: React.FC<HeaderProps> = ({
   title,
   showBackButton = true,
   showLogo = true,
+  backgroundColor = 'bg-white',
+  textColor = 'text-gray-900',
+  rightComponent,
   onBackClick,
 }) => {
   const navigate = useNavigate();
@@ -28,7 +33,7 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <div className={`flex items-center justify-between px-4 py-4`}>
+    <div className={`flex items-center justify-between px-4 py-4 ${backgroundColor}`}>
       {showBackButton ? (
         <button
           onClick={handleBackClick}
@@ -37,18 +42,18 @@ const Header: React.FC<HeaderProps> = ({
           <img src={backSvg} alt="Back" className="w-6 h-6" />
         </button>
       ) : (
-        <div className="w-8 h-8"></div>
+        <div className="w-8 h-8" />
       )}
-
-      <h1 className="text-lg font-semibold text-gray-900">{title}</h1>
-
-      {showLogo ? (
-        <div className="w-9 h-9 flex items-center justify-center">
-          <img src={iconSvg} alt="MoPT Logo" className="w-9 h-9" />
-        </div>
-      ) : (
-        <div className="w-8 h-8"></div>
-      )}
+      
+      <h1 className={`text-lg font-semibold ${textColor}`}>{title}</h1>
+      
+      <div className="w-8 h-8 flex items-center justify-center">
+        {rightComponent ? (
+          rightComponent
+        ) : showLogo ? (
+          <img src={iconSvg} alt="MoPT Logo" className="w-6 h-6" />
+        ) : null}
+      </div>
     </div>
   );
 };

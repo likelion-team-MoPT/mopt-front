@@ -10,12 +10,12 @@ const Onboarding: React.FC = () => {
 
   const handleKakaoLogin = () => {
     // 카카오 로그인 로직
-    navigate('/welcome');
+    navigate('/business-info');
   };
 
   const handleGoogleLogin = () => {
     // 구글 로그인 로직
-    navigate('/welcome');
+    navigate('/business-info');
   };
 
   return (

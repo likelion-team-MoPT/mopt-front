@@ -1,6 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Layout, FeatureIcon } from '../components/common';
+import { Layout, FeatureIcon, Loading, ErrorMessage } from '../components/common';
+import { useTrendKeywords, useTotalReport, useInsights } from '../hooks/useApi';
+import { useUserStore } from '../store/userStore';
 import iconSvg from '../assets/icon.svg';
 import mobilePng from '../assets/mobile.png';
 import sliceSvg from '../assets/Slice.svg';
@@ -14,12 +16,27 @@ import profileSvg from '../assets/profile.svg';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
+  const { user } = useUserStore();
+  
+  // API 호출
+  const { data: trendKeywords, isLoading: trendLoading, error: trendError } = useTrendKeywords('강남구', 5);
+  const { data: totalReport, isLoading: reportLoading, error: reportError } = useTotalReport({ period: 'week' });
+  const { data: insights, isLoading: insightsLoading, error: insightsError } = useInsights('new');
+
+  // 주간 매출 데이터 포맷팅
+  const formatCurrency = (amount: number) => {
+    return `₩${amount.toLocaleString()}`;
+  };
+
+  const formatPercentage = (value: number) => {
+    return value > 0 ? `+${value}%` : `${value}%`;
+  };
 
   return (
     <Layout showBottomTab={false}>
       <div className="min-h-screen bg-gray-50">
         {/* Header */}
-        <div className="flex justify-between items-center px-4 py-3">
+        <div className="flex justify-between items-center px-4 py-3 bg-white">
           <div className="w-8 h-8 flex items-center justify-center">
             <img src={iconSvg} alt="MoPT Logo" className="w-8 h-8" />
           </div>
@@ -68,9 +85,13 @@ const Home: React.FC = () => {
             label="리포트"
             onClick={() => navigate('/analytics')}
           />
-          <FeatureIcon image={fantasySvg} label="AI 인사이트" onClick = {() => navigate('/insight')} />
-          <FeatureIcon
-            image={webadSvg}
+          <FeatureIcon 
+            image={fantasySvg} 
+            label="AI 인사이트"
+            onClick={() => navigate('/insight')}
+          />
+          <FeatureIcon 
+            image={webadSvg} 
             label="캠페인"
             onClick={() => navigate('/campaigns')}
           />
@@ -83,24 +104,50 @@ const Home: React.FC = () => {
               <h2 className="text-2xl font-semibold text-gray-900">
                 주간 매출 동향
               </h2>
-              <span className="text-xs text-gray-500">더보기 &gt;</span>
+              <span 
+                className="text-xs text-gray-500 cursor-pointer"
+                onClick={() => navigate('/analytics')}
+              >
+                더보기 &gt;
+              </span>
             </div>
             <p className="text-xs text-gray-500 mb-3">최근 7일간의 매출</p>
-            <div className="flex items-end mb-2">
-              <span className="text-2xl font-bold text-gray-900">₩12,345</span>
-            </div>
-            <div className="flex items-center">
-              <span className="text-sm">
-                <span className="text-gray-500">이번 주 </span>
-                <span className="text-blue-600">+12%</span>
-              </span>
-              <div className="ml-2 h-8 flex-1 bg-gray-100 rounded relative overflow-hidden">
-                <div
-                  className="absolute inset-0 bg-yellow-400 rounded"
-                  style={{ width: '60%' }}
-                ></div>
+            
+            {reportLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <div className="animate-spin w-6 h-6 border-2 border-yellow-400 border-t-transparent rounded-full" />
               </div>
-            </div>
+            ) : reportError ? (
+              <div className="text-center py-4">
+                <p className="text-sm text-gray-500">데이터를 불러올 수 없습니다</p>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-end mb-2">
+                  <span className="text-2xl font-bold text-gray-900">
+                    {totalReport ? formatCurrency(totalReport.total_sales) : '₩0'}
+                  </span>
+                </div>
+                <div className="flex items-center">
+                  <span className="text-sm">
+                    <span className="text-gray-500">이번 주 </span>
+                    <span className="text-blue-600">
+                      {totalReport?.overall_roas ? formatPercentage(Math.round((totalReport.overall_roas - 100))) : '+0%'}
+                    </span>
+                  </span>
+                  <div className="ml-2 h-8 flex-1 bg-gray-100 rounded relative overflow-hidden">
+                    <div
+                      className="absolute inset-0 bg-yellow-400 rounded"
+                      style={{ 
+                        width: totalReport?.overall_roas 
+                          ? `${Math.min(totalReport.overall_roas / 5, 100)}%` 
+                          : '0%' 
+                      }}
+                    ></div>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
 
@@ -111,101 +158,74 @@ const Home: React.FC = () => {
               <h3 className="text-2xl font-semibold text-gray-900">
                 AI 인사이트
               </h3>
-              <span className="text-xs text-gray-500">더보기 &gt;</span>
+              <span 
+                className="text-xs text-gray-500 cursor-pointer"
+                onClick={() => navigate('/insight')}
+              >
+                더보기 &gt;
+              </span>
             </header>
 
-            <p className="flex items-baseline text-md text-gray-900 py-2">
-              <span>새로운 AI 추천 전략 </span>
-              <span className="ml-1 rounded-full bg-yellow-50 px-2 py-0.5 text-base font-semibold text-red-400">
-                3건
-              </span>
-            </p>
-
-            <div className="size- px-4 py-0.5 bg-yellow-400 rounded-[200px] inline-flex justify-center items-center gap-2 overflow-hidden">
-              <div className="text-center justify-start text-white text-[10px] font-medium font-['Pretendard'] leading-3 tracking-tight">
-                미리보기
+            {insightsLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <div className="animate-spin w-6 h-6 border-2 border-yellow-400 border-t-transparent rounded-full" />
               </div>
-            </div>
+            ) : insightsError ? (
+              <div className="text-center py-4">
+                <p className="text-sm text-gray-500">AI 인사이트를 불러올 수 없습니다</p>
+              </div>
+            ) : (
+              <>
+                <p className="flex items-baseline text-md text-gray-900 py-2">
+                  <span>새로운 AI 추천 전략 </span>
+                  <span className="ml-1 rounded-full bg-yellow-50 px-2 py-0.5 text-base font-semibold text-red-400">
+                    {insights?.data?.length || 0}건
+                  </span>
+                </p>
 
-            <div className="w-full p-4 bg-yellow-50 rounded-xl shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] flex flex-col gap-2">
-              <div className="flex flex-col gap-1">
-                <div className="flex items-center gap-1">
-                  <div className="text-neutral-500 text-[10px] font-medium leading-3 tracking-tight">
-                    생성일
-                  </div>
-                  <div className="flex-1 text-neutral-500 text-[10px] font-medium leading-3 tracking-tight">
-                    2025.08.01.
+                <div className="size- px-4 py-0.5 bg-yellow-400 rounded-[200px] inline-flex justify-center items-center gap-2 overflow-hidden">
+                  <div className="text-center justify-start text-white text-[10px] font-medium font-['Pretendard'] leading-3 tracking-tight">
+                    미리보기
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="text-neutral-500 text-sm font-normal leading-snug">
-                    �
-                  </div>
-                  <div className="flex-1 flex items-center gap-1">
-                    <div className="flex-1 text-neutral-900 text-base font-semibold leading-normal">
-                      주말 점심 할인 캠페인 제안
-                    </div>
-                    <div className="px-1 py-px bg-red-400 rounded-[200px] flex justify-center items-center">
-                      <div className="text-yellow-50 text-[10px] font-medium leading-3 tracking-tight">
-                        N
+
+                <div className="w-full p-4 bg-yellow-50 rounded-xl shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] flex flex-col gap-2">
+                  {insights?.data && insights.data.length > 0 ? (
+                    insights.data.slice(0, 3).map((insight: any, index: number) => (
+                      <div key={insight.id} className="flex flex-col gap-1">
+                        <div className="flex items-center gap-1">
+                          <div className="text-neutral-500 text-[10px] font-medium leading-3 tracking-tight">
+                            생성일
+                          </div>
+                          <div className="flex-1 text-neutral-500 text-[10px] font-medium leading-3 tracking-tight">
+                            {insight.created_at ? new Date(insight.created_at).toLocaleDateString('ko-KR').replace(/\./g, '.') : '날짜 없음'}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="text-neutral-500 text-sm font-normal leading-snug">
+                            {insight.reason_summary?.icon || '💡'}
+                          </div>
+                          <div className="flex-1 flex items-center gap-1">
+                            <div className="flex-1 text-neutral-900 text-base font-semibold leading-normal">
+                              {insight.title}
+                            </div>
+                            <div className="px-1 py-px bg-red-400 rounded-[200px] flex justify-center items-center">
+                              <div className="text-yellow-50 text-[10px] font-medium leading-3 tracking-tight">
+                                N
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-4">
+                      <p className="text-sm text-gray-500">새로운 AI 인사이트가 없습니다</p>
                     </div>
-                  </div>
+                  )}
                 </div>
-              </div>
-
-              <div className="flex flex-col gap-1">
-                <div className="flex items-center gap-1">
-                  <div className="text-neutral-500 text-[10px] font-medium leading-3 tracking-tight">
-                    생성일
-                  </div>
-                  <div className="flex-1 text-neutral-500 text-[10px] font-medium leading-3 tracking-tight">
-                    2025.07.30.
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="text-neutral-500 text-sm font-normal leading-snug">
-                    �
-                  </div>
-                  <div className="flex-1 flex items-center gap-1">
-                    <div className="flex-1 text-neutral-900 text-base font-semibold leading-normal">
-                      SNS 광고 예산 확대 필요
-                    </div>
-                    <div className="px-1 py-px bg-red-400 rounded-[200px] flex justify-center items-center">
-                      <div className="text-yellow-50 text-[10px] font-medium leading-3 tracking-tight">
-                        N
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-1">
-                <div className="flex items-center gap-1">
-                  <div className="text-neutral-500 text-[10px] font-medium leading-3 tracking-tight">
-                    생성일
-                  </div>
-                  <div className="flex-1 text-neutral-500 text-[10px] font-medium leading-3 tracking-tight">
-                    2025.08.05.
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="text-neutral-500 text-xs font-normal leading-none">
-                    🥐
-                  </div>
-                  <div className="flex-1 flex items-center gap-1">
-                    <div className="flex-1 text-neutral-900 text-base font-semibold leading-normal">
-                      브런치 세트 프로모션 제안
-                    </div>
-                    <div className="px-1 py-px bg-red-400 rounded-[200px] flex justify-center items-center">
-                      <div className="text-yellow-50 text-[10px] font-medium leading-3 tracking-tight">
-                        N
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+              </>
+            )}
           </div>
         </section>
 
@@ -218,37 +238,31 @@ const Home: React.FC = () => {
               </h2>
               <img src={top5Svg} alt="Top 5" className="w-15 h-15" />
             </div>
-            <div className="self-stretch inline-flex flex-col justify-start items-start gap-2">
-              <div className="w-full inline-flex justify-between items-center">
-                <div className="px-4 py-1.5 bg-orange-100 rounded-[200px] shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] flex justify-center items-center gap-2 overflow-hidden">
-                  <div className="text-center justify-start text-yellow-500 text-xs font-medium font-['Pretendard'] leading-none">
-                    #피크닉 도시락
-                  </div>
-                </div>
-                <div className="px-4 py-1.5 bg-orange-100 rounded-[200px] shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] flex justify-center items-center gap-2 overflow-hidden">
-                  <div className="text-center justify-start text-yellow-500 text-xs font-medium font-['Pretendard'] leading-none">
-                    #혼밥 맛집
-                  </div>
-                </div>
-                <div className="px-4 py-1.5 bg-orange-100 rounded-[200px] shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] flex justify-center items-center gap-2 overflow-hidden">
-                  <div className="text-center justify-start text-yellow-500 text-xs font-medium font-['Pretendard'] leading-none">
-                    #SNS 인기 메뉴
-                  </div>
+            
+            {trendLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <div className="animate-spin w-6 h-6 border-2 border-yellow-400 border-t-transparent rounded-full" />
+              </div>
+            ) : trendError ? (
+              <div className="text-center py-4">
+                <p className="text-sm text-gray-500">트렌드 키워드를 불러올 수 없습니다</p>
+              </div>
+            ) : (
+              <div className="self-stretch inline-flex flex-col justify-start items-start gap-2">
+                <div className="w-full flex flex-wrap justify-center items-center gap-2">
+                  {trendKeywords?.trend_keywords?.slice(0, 5).map((keyword: string, index: number) => (
+                    <div 
+                      key={index}
+                      className="px-4 py-1.5 bg-orange-100 rounded-[200px] shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] flex justify-center items-center gap-2 overflow-hidden"
+                    >
+                      <div className="text-center justify-start text-yellow-500 text-xs font-medium font-['Pretendard'] leading-none">
+                        #{keyword}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-              <div className="w-full inline-flex justify-center items-center gap-6">
-                <div className="px-4 py-1.5 bg-orange-100 rounded-[200px] shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] flex justify-center items-center gap-2 overflow-hidden">
-                  <div className="text-center justify-start text-yellow-500 text-xs font-medium font-['Pretendard'] leading-none">
-                    #여름 음료
-                  </div>
-                </div>
-                <div className="px-4 py-1.5 bg-orange-100 rounded-[200px] shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] flex justify-center items-center gap-2 overflow-hidden">
-                  <div className="text-center justify-start text-yellow-500 text-xs font-medium font-['Pretendard'] leading-none">
-                    #가성비 식당
-                  </div>
-                </div>
-              </div>
-            </div>
+            )}
 
             {/* Illustration */}
             <div className="flex justify-center py-4">
