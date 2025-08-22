@@ -27,14 +27,13 @@ const Home: React.FC = () => {
   const { user } = useUserStore();
 
   // 상권 선택 상태
-  const [selectedRegion, setSelectedRegion] = useState('강남구');
+  const [selectedRegion, setSelectedRegion] = useState('강남');
 
   // 상권 목록
   const regions = [
     { value: '강남구', label: '강남구' },
-    { value: '홍대', label: '홍대' },
-    { value: '강남', label: '강남' },
-    { value: '모현', label: '모현' },
+    { value: '마포구', label: '마포구' },
+    { value: '모현', label: '모현읍' },
   ];
 
   // API 호출
@@ -120,7 +119,7 @@ const Home: React.FC = () => {
     <Layout showBottomTab={false}>
       <div className="min-h-screen bg-gray-50">
         {/* Header */}
-        <div className="flex justify-between items-center px-4 py-3 bg-white">
+        <div className="flex justify-between items-center px-4 py-3">
           <div className="w-8 h-8 flex items-center justify-center">
             <img src={iconSvg} alt="MoPT Logo" className="w-8 h-8" />
           </div>
@@ -433,7 +432,7 @@ const Home: React.FC = () => {
                 {campaigns?.data?.slice(0, 2).map(campaign => (
                   <div
                     key={campaign.id}
-                    className="w-80 h-[92px] p-4 bg-gradient-to-r from-yellow-400 to-amber-200/90 rounded-xl shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] relative cursor-pointer hover:opacity-90 transition-opacity"
+                    className="w-80 lg:w-full h-[92px] p-4 bg-gradient-to-r from-yellow-400 to-amber-200/90 rounded-xl shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] relative cursor-pointer hover:opacity-90 transition-opacity"
                     onClick={() => navigate(`/campaigns/${campaign.id}`)}
                   >
                     <div>
