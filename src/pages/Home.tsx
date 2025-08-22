@@ -1,6 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Layout, FeatureIcon, Loading, ErrorMessage } from '../components/common';
+import {
+  Layout,
+  FeatureIcon,
+  Loading,
+  ErrorMessage,
+} from '../components/common';
 import { useTrendKeywords, useTotalReport, useInsights } from '../hooks/useApi';
 import { useUserStore } from '../store/userStore';
 import iconSvg from '../assets/icon.svg';
@@ -12,16 +17,28 @@ import top5Svg from '../assets/top5.svg';
 import writingBroSvg from '../assets/writing-bro.svg';
 import facebookSvg from '../assets/Facebook.svg';
 import instagramSvg from '../assets/instagram.svg';
-import profileSvg from '../assets/profile.svg';
+import myInfoSvg from '../assets/myInfo.svg';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useUserStore();
-  
+
   // API 호출
-  const { data: trendKeywords, isLoading: trendLoading, error: trendError } = useTrendKeywords('강남구', 5);
-  const { data: totalReport, isLoading: reportLoading, error: reportError } = useTotalReport({ period: 'week' });
-  const { data: insights, isLoading: insightsLoading, error: insightsError } = useInsights('new');
+  const {
+    data: trendKeywords,
+    isLoading: trendLoading,
+    error: trendError,
+  } = useTrendKeywords('강남구', 5);
+  const {
+    data: totalReport,
+    isLoading: reportLoading,
+    error: reportError,
+  } = useTotalReport({ period: 'week' });
+  const {
+    data: insights,
+    isLoading: insightsLoading,
+    error: insightsError,
+  } = useInsights('new');
 
   // 주간 매출 데이터 포맷팅
   const formatCurrency = (amount: number) => {
@@ -40,11 +57,11 @@ const Home: React.FC = () => {
           <div className="w-8 h-8 flex items-center justify-center">
             <img src={iconSvg} alt="MoPT Logo" className="w-8 h-8" />
           </div>
-          <div 
+          <div
             className="w-8 h-8 flex items-center justify-center cursor-pointer"
             onClick={() => navigate('/profile')}
           >
-            <img src={profileSvg} alt="Profile" className="w-5 h-5" />
+            <img src={myInfoSvg} alt="Profile" className="w-5 h-5" />
           </div>
         </div>
 
@@ -60,7 +77,10 @@ const Home: React.FC = () => {
               가장 효과적인 AI 마케팅 솔루션
             </p>
             <div className="flex items-center gap-10 lg:justify-between">
-              <button className="h-10 px-6 bg-yellow-400 rounded-[200px] shadow-[0px_4px_8px_0px_rgba(18,18,18,0.12)] flex items-center justify-center hover:bg-yellow-500 transition-colors flex-shrink-0">
+              <button
+                className="h-10 px-6 bg-yellow-400 rounded-[200px] shadow-[0px_4px_8px_0px_rgba(18,18,18,0.12)] flex items-center justify-center hover:bg-yellow-500 transition-colors flex-shrink-0"
+                onClick={() => navigate('/analytics')}
+              >
                 <span className="text-white text-base font-['Pretendard'] whitespace-nowrap">
                   내 매출 확인하기
                 </span>
@@ -85,13 +105,13 @@ const Home: React.FC = () => {
             label="리포트"
             onClick={() => navigate('/analytics')}
           />
-          <FeatureIcon 
-            image={fantasySvg} 
+          <FeatureIcon
+            image={fantasySvg}
             label="AI 인사이트"
             onClick={() => navigate('/insight')}
           />
-          <FeatureIcon 
-            image={webadSvg} 
+          <FeatureIcon
+            image={webadSvg}
             label="캠페인"
             onClick={() => navigate('/campaigns')}
           />
@@ -104,7 +124,7 @@ const Home: React.FC = () => {
               <h2 className="text-2xl font-semibold text-gray-900">
                 주간 매출 동향
               </h2>
-              <span 
+              <span
                 className="text-xs text-gray-500 cursor-pointer"
                 onClick={() => navigate('/analytics')}
               >
@@ -112,36 +132,44 @@ const Home: React.FC = () => {
               </span>
             </div>
             <p className="text-xs text-gray-500 mb-3">최근 7일간의 매출</p>
-            
+
             {reportLoading ? (
               <div className="flex items-center justify-center py-8">
                 <div className="animate-spin w-6 h-6 border-2 border-yellow-400 border-t-transparent rounded-full" />
               </div>
             ) : reportError ? (
               <div className="text-center py-4">
-                <p className="text-sm text-gray-500">데이터를 불러올 수 없습니다</p>
+                <p className="text-sm text-gray-500">
+                  데이터를 불러올 수 없습니다
+                </p>
               </div>
             ) : (
               <>
                 <div className="flex items-end mb-2">
                   <span className="text-2xl font-bold text-gray-900">
-                    {totalReport ? formatCurrency(totalReport.total_sales) : '₩0'}
+                    {totalReport
+                      ? formatCurrency(totalReport.total_sales)
+                      : '₩0'}
                   </span>
                 </div>
                 <div className="flex items-center">
                   <span className="text-sm">
                     <span className="text-gray-500">이번 주 </span>
                     <span className="text-blue-600">
-                      {totalReport?.overall_roas ? formatPercentage(Math.round((totalReport.overall_roas - 100))) : '+0%'}
+                      {totalReport?.overall_roas
+                        ? formatPercentage(
+                            Math.round(totalReport.overall_roas - 100)
+                          )
+                        : '+0%'}
                     </span>
                   </span>
                   <div className="ml-2 h-8 flex-1 bg-gray-100 rounded relative overflow-hidden">
                     <div
                       className="absolute inset-0 bg-yellow-400 rounded"
-                      style={{ 
-                        width: totalReport?.overall_roas 
-                          ? `${Math.min(totalReport.overall_roas / 5, 100)}%` 
-                          : '0%' 
+                      style={{
+                        width: totalReport?.overall_roas
+                          ? `${Math.min(totalReport.overall_roas / 5, 100)}%`
+                          : '0%',
                       }}
                     ></div>
                   </div>
@@ -158,7 +186,7 @@ const Home: React.FC = () => {
               <h3 className="text-2xl font-semibold text-gray-900">
                 AI 인사이트
               </h3>
-              <span 
+              <span
                 className="text-xs text-gray-500 cursor-pointer"
                 onClick={() => navigate('/insight')}
               >
@@ -172,7 +200,9 @@ const Home: React.FC = () => {
               </div>
             ) : insightsError ? (
               <div className="text-center py-4">
-                <p className="text-sm text-gray-500">AI 인사이트를 불러올 수 없습니다</p>
+                <p className="text-sm text-gray-500">
+                  AI 인사이트를 불러올 수 없습니다
+                </p>
               </div>
             ) : (
               <>
@@ -191,36 +221,44 @@ const Home: React.FC = () => {
 
                 <div className="w-full p-4 bg-yellow-50 rounded-xl shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] flex flex-col gap-2">
                   {insights?.data && insights.data.length > 0 ? (
-                    insights.data.slice(0, 3).map((insight: any, index: number) => (
-                      <div key={insight.id} className="flex flex-col gap-1">
-                        <div className="flex items-center gap-1">
-                          <div className="text-neutral-500 text-[10px] font-medium leading-3 tracking-tight">
-                            생성일
-                          </div>
-                          <div className="flex-1 text-neutral-500 text-[10px] font-medium leading-3 tracking-tight">
-                            {insight.created_at ? new Date(insight.created_at).toLocaleDateString('ko-KR').replace(/\./g, '.') : '날짜 없음'}
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="text-neutral-500 text-sm font-normal leading-snug">
-                            {insight.reason_summary?.icon || '💡'}
-                          </div>
-                          <div className="flex-1 flex items-center gap-1">
-                            <div className="flex-1 text-neutral-900 text-base font-semibold leading-normal">
-                              {insight.title}
+                    insights.data
+                      .slice(0, 3)
+                      .map((insight: any, index: number) => (
+                        <div key={insight.id} className="flex flex-col gap-1">
+                          <div className="flex items-center gap-1">
+                            <div className="text-neutral-500 text-[10px] font-medium leading-3 tracking-tight">
+                              생성일
                             </div>
-                            <div className="px-1 py-px bg-red-400 rounded-[200px] flex justify-center items-center">
-                              <div className="text-yellow-50 text-[10px] font-medium leading-3 tracking-tight">
-                                N
+                            <div className="flex-1 text-neutral-500 text-[10px] font-medium leading-3 tracking-tight">
+                              {insight.created_at
+                                ? new Date(insight.created_at)
+                                    .toLocaleDateString('ko-KR')
+                                    .replace(/\./g, '.')
+                                : '날짜 없음'}
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="text-neutral-500 text-sm font-normal leading-snug">
+                              {insight.reason_summary?.icon || '💡'}
+                            </div>
+                            <div className="flex-1 flex items-center gap-1">
+                              <div className="flex-1 text-neutral-900 text-base font-semibold leading-normal">
+                                {insight.title}
+                              </div>
+                              <div className="px-1 py-px bg-red-400 rounded-[200px] flex justify-center items-center">
+                                <div className="text-yellow-50 text-[10px] font-medium leading-3 tracking-tight">
+                                  N
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))
+                      ))
                   ) : (
                     <div className="text-center py-4">
-                      <p className="text-sm text-gray-500">새로운 AI 인사이트가 없습니다</p>
+                      <p className="text-sm text-gray-500">
+                        새로운 AI 인사이트가 없습니다
+                      </p>
                     </div>
                   )}
                 </div>
@@ -238,28 +276,32 @@ const Home: React.FC = () => {
               </h2>
               <img src={top5Svg} alt="Top 5" className="w-15 h-15" />
             </div>
-            
+
             {trendLoading ? (
               <div className="flex items-center justify-center py-8">
                 <div className="animate-spin w-6 h-6 border-2 border-yellow-400 border-t-transparent rounded-full" />
               </div>
             ) : trendError ? (
               <div className="text-center py-4">
-                <p className="text-sm text-gray-500">트렌드 키워드를 불러올 수 없습니다</p>
+                <p className="text-sm text-gray-500">
+                  트렌드 키워드를 불러올 수 없습니다
+                </p>
               </div>
             ) : (
               <div className="self-stretch inline-flex flex-col justify-start items-start gap-2">
                 <div className="w-full flex flex-wrap justify-center items-center gap-2">
-                  {trendKeywords?.trend_keywords?.slice(0, 5).map((keyword: string, index: number) => (
-                    <div 
-                      key={index}
-                      className="px-4 py-1.5 bg-orange-100 rounded-[200px] shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] flex justify-center items-center gap-2 overflow-hidden"
-                    >
-                      <div className="text-center justify-start text-yellow-500 text-xs font-medium font-['Pretendard'] leading-none">
-                        #{keyword}
+                  {trendKeywords?.trend_keywords
+                    ?.slice(0, 5)
+                    .map((keyword: string, index: number) => (
+                      <div
+                        key={index}
+                        className="px-4 py-1.5 bg-orange-100 rounded-[200px] shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] flex justify-center items-center gap-2 overflow-hidden"
+                      >
+                        <div className="text-center justify-start text-yellow-500 text-xs font-medium font-['Pretendard'] leading-none">
+                          #{keyword}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
                 </div>
               </div>
             )}
