@@ -1,8 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Layout, FeatureIcon, Loading, ErrorMessage } from '../components/common';
-import { useTrendKeywords, useTotalReport, useInsights } from '../hooks/useApi';
+import { Layout, FeatureIcon, Loading } from '../components/common';
+import WeeklySalesChart from '../components/home/WeeklySalesChart';
+import {
+  useTrendKeywords,
+  useTotalReport,
+  useInsights,
+  useCampaigns,
+  useUserNotices,
+} from '../hooks/useApi';
 import { useUserStore } from '../store/userStore';
+
 import iconSvg from '../assets/icon.svg';
 import mobilePng from '../assets/mobile.png';
 import sliceSvg from '../assets/Slice.svg';
@@ -12,16 +20,52 @@ import top5Svg from '../assets/top5.svg';
 import writingBroSvg from '../assets/writing-bro.svg';
 import facebookSvg from '../assets/Facebook.svg';
 import instagramSvg from '../assets/instagram.svg';
-import profileSvg from '../assets/profile.svg';
+import myInfoSvg from '../assets/myInfo.svg';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useUserStore();
-  
+
+  // 상권 선택 상태
+  const [selectedRegion, setSelectedRegion] = useState('강남구');
+
+  // 상권 목록
+  const regions = [
+    { value: '강남구', label: '강남구' },
+    { value: '홍대', label: '홍대' },
+    { value: '강남', label: '강남' },
+    { value: '모현', label: '모현' },
+  ];
+
   // API 호출
-  const { data: trendKeywords, isLoading: trendLoading, error: trendError } = useTrendKeywords('강남구', 5);
-  const { data: totalReport, isLoading: reportLoading, error: reportError } = useTotalReport({ period: 'week' });
-  const { data: insights, isLoading: insightsLoading, error: insightsError } = useInsights('new');
+  const {
+    data: trendKeywords,
+    isLoading: trendLoading,
+    error: trendError,
+  } = useTrendKeywords(selectedRegion, 5);
+
+  const {
+    data: totalReport,
+    isLoading: reportLoading,
+    error: reportError,
+  } = useTotalReport({ period: 'week' });
+  const {
+    data: insights,
+    isLoading: insightsLoading,
+    error: insightsError,
+  } = useInsights('new');
+
+  const {
+    data: campaigns,
+    isLoading: campaignsLoading,
+    error: campaignsError,
+  } = useCampaigns('active');
+
+  const {
+    data: notices,
+    isLoading: noticesLoading,
+    error: noticesError,
+  } = useUserNotices(user?.id || 1, 1, 1); // 최신 공지사항 1개만 가져오기
 
   // 주간 매출 데이터 포맷팅
   const formatCurrency = (amount: number) => {
@@ -32,6 +76,46 @@ const Home: React.FC = () => {
     return value > 0 ? `+${value}%` : `${value}%`;
   };
 
+  // 채널별 아이콘 매핑
+  const getChannelIcon = (channel: string) => {
+    switch (channel.toLowerCase()) {
+      case 'facebook':
+        return facebookSvg;
+      case 'instagram':
+        return instagramSvg;
+      default:
+        return facebookSvg; // 기본값
+    }
+  };
+
+  const getChannelName = (channel: string) => {
+    switch (channel.toLowerCase()) {
+      case 'facebook':
+        return 'Facebook';
+      case 'instagram':
+        return 'Instagram';
+      default:
+        return channel;
+    }
+  };
+
+  // 주간 매출 차트 데이터 생성 함수
+  const generateWeeklySalesData = () => {
+    // 샘플 데이터 (실제 일별 매출 데이터가 없으므로)
+    const baseSales = totalReport?.total_sales || 10000000;
+    const dailyVariation = [0.8, 0.6, 0.9, 0.7, 1.2, 1.4, 1.1]; // 요일별 변동률
+
+    return [
+      { day: '월', sales: Math.round((baseSales / 7) * dailyVariation[0]) },
+      { day: '화', sales: Math.round((baseSales / 7) * dailyVariation[1]) },
+      { day: '수', sales: Math.round((baseSales / 7) * dailyVariation[2]) },
+      { day: '목', sales: Math.round((baseSales / 7) * dailyVariation[3]) },
+      { day: '금', sales: Math.round((baseSales / 7) * dailyVariation[4]) },
+      { day: '토', sales: Math.round((baseSales / 7) * dailyVariation[5]) },
+      { day: '일', sales: Math.round((baseSales / 7) * dailyVariation[6]) },
+    ];
+  };
+
   return (
     <Layout showBottomTab={false}>
       <div className="min-h-screen bg-gray-50">
@@ -40,11 +124,11 @@ const Home: React.FC = () => {
           <div className="w-8 h-8 flex items-center justify-center">
             <img src={iconSvg} alt="MoPT Logo" className="w-8 h-8" />
           </div>
-          <div 
+          <div
             className="w-8 h-8 flex items-center justify-center cursor-pointer"
             onClick={() => navigate('/profile')}
           >
-            <img src={profileSvg} alt="Profile" className="w-5 h-5" />
+            <img src={myInfoSvg} alt="Profile" className="w-5 h-5" />
           </div>
         </div>
 
@@ -60,7 +144,10 @@ const Home: React.FC = () => {
               가장 효과적인 AI 마케팅 솔루션
             </p>
             <div className="flex items-center gap-10 lg:justify-between">
-              <button className="h-10 px-6 bg-yellow-400 rounded-[200px] shadow-[0px_4px_8px_0px_rgba(18,18,18,0.12)] flex items-center justify-center hover:bg-yellow-500 transition-colors flex-shrink-0">
+              <button
+                className="h-10 px-6 bg-yellow-400 rounded-[200px] shadow-[0px_4px_8px_0px_rgba(18,18,18,0.12)] flex items-center justify-center hover:bg-yellow-500 transition-colors flex-shrink-0"
+                onClick={() => navigate('/analytics')}
+              >
                 <span className="text-white text-base font-['Pretendard'] whitespace-nowrap">
                   내 매출 확인하기
                 </span>
@@ -85,13 +172,13 @@ const Home: React.FC = () => {
             label="리포트"
             onClick={() => navigate('/analytics')}
           />
-          <FeatureIcon 
-            image={fantasySvg} 
+          <FeatureIcon
+            image={fantasySvg}
             label="AI 인사이트"
             onClick={() => navigate('/insight')}
           />
-          <FeatureIcon 
-            image={webadSvg} 
+          <FeatureIcon
+            image={webadSvg}
             label="캠페인"
             onClick={() => navigate('/campaigns')}
           />
@@ -104,7 +191,7 @@ const Home: React.FC = () => {
               <h2 className="text-2xl font-semibold text-gray-900">
                 주간 매출 동향
               </h2>
-              <span 
+              <span
                 className="text-xs text-gray-500 cursor-pointer"
                 onClick={() => navigate('/analytics')}
               >
@@ -112,39 +199,40 @@ const Home: React.FC = () => {
               </span>
             </div>
             <p className="text-xs text-gray-500 mb-3">최근 7일간의 매출</p>
-            
+
             {reportLoading ? (
               <div className="flex items-center justify-center py-8">
                 <div className="animate-spin w-6 h-6 border-2 border-yellow-400 border-t-transparent rounded-full" />
               </div>
             ) : reportError ? (
               <div className="text-center py-4">
-                <p className="text-sm text-gray-500">데이터를 불러올 수 없습니다</p>
+                <p className="text-sm text-gray-500">
+                  데이터를 불러올 수 없습니다
+                </p>
               </div>
             ) : (
               <>
-                <div className="flex items-end mb-2">
+                <div className="flex items-center justify-between mb-4">
                   <span className="text-2xl font-bold text-gray-900">
-                    {totalReport ? formatCurrency(totalReport.total_sales) : '₩0'}
+                    {totalReport
+                      ? formatCurrency(totalReport.total_sales)
+                      : '₩0'}
                   </span>
-                </div>
-                <div className="flex items-center">
                   <span className="text-sm">
                     <span className="text-gray-500">이번 주 </span>
                     <span className="text-blue-600">
-                      {totalReport?.overall_roas ? formatPercentage(Math.round((totalReport.overall_roas - 100))) : '+0%'}
+                      {totalReport?.overall_roas
+                        ? formatPercentage(
+                            Math.round(totalReport.overall_roas - 100)
+                          )
+                        : '+0%'}
                     </span>
                   </span>
-                  <div className="ml-2 h-8 flex-1 bg-gray-100 rounded relative overflow-hidden">
-                    <div
-                      className="absolute inset-0 bg-yellow-400 rounded"
-                      style={{ 
-                        width: totalReport?.overall_roas 
-                          ? `${Math.min(totalReport.overall_roas / 5, 100)}%` 
-                          : '0%' 
-                      }}
-                    ></div>
-                  </div>
+                </div>
+
+                {/* 주간 매출 차트 */}
+                <div className="mt-4">
+                  <WeeklySalesChart data={generateWeeklySalesData()} />
                 </div>
               </>
             )}
@@ -158,7 +246,7 @@ const Home: React.FC = () => {
               <h3 className="text-2xl font-semibold text-gray-900">
                 AI 인사이트
               </h3>
-              <span 
+              <span
                 className="text-xs text-gray-500 cursor-pointer"
                 onClick={() => navigate('/insight')}
               >
@@ -172,7 +260,9 @@ const Home: React.FC = () => {
               </div>
             ) : insightsError ? (
               <div className="text-center py-4">
-                <p className="text-sm text-gray-500">AI 인사이트를 불러올 수 없습니다</p>
+                <p className="text-sm text-gray-500">
+                  AI 인사이트를 불러올 수 없습니다
+                </p>
               </div>
             ) : (
               <>
@@ -191,36 +281,44 @@ const Home: React.FC = () => {
 
                 <div className="w-full p-4 bg-yellow-50 rounded-xl shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] flex flex-col gap-2">
                   {insights?.data && insights.data.length > 0 ? (
-                    insights.data.slice(0, 3).map((insight: any, index: number) => (
-                      <div key={insight.id} className="flex flex-col gap-1">
-                        <div className="flex items-center gap-1">
-                          <div className="text-neutral-500 text-[10px] font-medium leading-3 tracking-tight">
-                            생성일
-                          </div>
-                          <div className="flex-1 text-neutral-500 text-[10px] font-medium leading-3 tracking-tight">
-                            {insight.created_at ? new Date(insight.created_at).toLocaleDateString('ko-KR').replace(/\./g, '.') : '날짜 없음'}
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="text-neutral-500 text-sm font-normal leading-snug">
-                            {insight.reason_summary?.icon || '💡'}
-                          </div>
-                          <div className="flex-1 flex items-center gap-1">
-                            <div className="flex-1 text-neutral-900 text-base font-semibold leading-normal">
-                              {insight.title}
+                    insights.data
+                      .slice(0, 3)
+                      .map((insight: any, index: number) => (
+                        <div key={insight.id} className="flex flex-col gap-1">
+                          <div className="flex items-center gap-1">
+                            <div className="text-neutral-500 text-[10px] font-medium leading-3 tracking-tight">
+                              생성일
                             </div>
-                            <div className="px-1 py-px bg-red-400 rounded-[200px] flex justify-center items-center">
-                              <div className="text-yellow-50 text-[10px] font-medium leading-3 tracking-tight">
-                                N
+                            <div className="flex-1 text-neutral-500 text-[10px] font-medium leading-3 tracking-tight">
+                              {insight.created_at
+                                ? new Date(insight.created_at)
+                                    .toLocaleDateString('ko-KR')
+                                    .replace(/\./g, '.')
+                                : '날짜 없음'}
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="text-neutral-500 text-sm font-normal leading-snug">
+                              {insight.reason_summary?.icon || '💡'}
+                            </div>
+                            <div className="flex-1 flex items-center gap-1">
+                              <div className="flex-1 text-neutral-900 text-base font-semibold leading-normal">
+                                {insight.title}
+                              </div>
+                              <div className="px-1 py-px bg-red-400 rounded-[200px] flex justify-center items-center">
+                                <div className="text-yellow-50 text-[10px] font-medium leading-3 tracking-tight">
+                                  N
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))
+                      ))
                   ) : (
                     <div className="text-center py-4">
-                      <p className="text-sm text-gray-500">새로운 AI 인사이트가 없습니다</p>
+                      <p className="text-sm text-gray-500">
+                        새로운 AI 인사이트가 없습니다
+                      </p>
                     </div>
                   )}
                 </div>
@@ -238,28 +336,32 @@ const Home: React.FC = () => {
               </h2>
               <img src={top5Svg} alt="Top 5" className="w-15 h-15" />
             </div>
-            
+
             {trendLoading ? (
               <div className="flex items-center justify-center py-8">
                 <div className="animate-spin w-6 h-6 border-2 border-yellow-400 border-t-transparent rounded-full" />
               </div>
             ) : trendError ? (
               <div className="text-center py-4">
-                <p className="text-sm text-gray-500">트렌드 키워드를 불러올 수 없습니다</p>
+                <p className="text-sm text-gray-500">
+                  트렌드 키워드를 불러올 수 없습니다
+                </p>
               </div>
             ) : (
               <div className="self-stretch inline-flex flex-col justify-start items-start gap-2">
                 <div className="w-full flex flex-wrap justify-center items-center gap-2">
-                  {trendKeywords?.trend_keywords?.slice(0, 5).map((keyword: string, index: number) => (
-                    <div 
-                      key={index}
-                      className="px-4 py-1.5 bg-orange-100 rounded-[200px] shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] flex justify-center items-center gap-2 overflow-hidden"
-                    >
-                      <div className="text-center justify-start text-yellow-500 text-xs font-medium font-['Pretendard'] leading-none">
-                        #{keyword}
+                  {trendKeywords?.trend_keywords
+                    ?.slice(0, 5)
+                    .map((keyword: string, index: number) => (
+                      <div
+                        key={index}
+                        className="px-4 py-1.5 bg-orange-100 rounded-[200px] shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] flex justify-center items-center gap-2 overflow-hidden"
+                      >
+                        <div className="text-center justify-start text-yellow-500 text-xs font-medium font-['Pretendard'] leading-none">
+                          #{keyword}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
                 </div>
               </div>
             )}
@@ -276,8 +378,19 @@ const Home: React.FC = () => {
             </div>
 
             <div className="text-center">
-              <select className="w-full p-3 border border-gray-200 rounded-lg text-sm text-gray-600">
-                <option>조회할 상권을 선택해주세요</option>
+              <select
+                className="w-full p-3 border border-gray-200 rounded-lg text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                value={selectedRegion}
+                onChange={e => setSelectedRegion(e.target.value)}
+              >
+                <option value="" disabled>
+                  조회할 상권을 선택해주세요
+                </option>
+                {regions.map(region => (
+                  <option key={region.value} value={region.value}>
+                    {region.label}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -290,59 +403,71 @@ const Home: React.FC = () => {
               <h2 className="text-2xl font-semibold text-gray-900">
                 진행 중인 캠페인
               </h2>
-              <span className="text-sm text-gray-500">더보기 &gt;</span>
+              <span
+                className="text-sm text-gray-500 cursor-pointer"
+                onClick={() => navigate('/campaigns')}
+              >
+                더보기 &gt;
+              </span>
             </div>
 
             <p className="flex items-baseline text-md text-gray-900 py-2">
               <span>현재 진행 중</span>
               <span className="ml-1 rounded-full bg-yellow-50 px-2 py-0.5 text-base font-semibold text-red-400">
-                2건
+                {campaigns?.data?.length || 0}건
               </span>
             </p>
 
-            <div className="space-y-3">
-              <div className="w-80 h-[92px] p-4 bg-gradient-to-r from-yellow-400 to-amber-200/90 rounded-xl shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] relative">
-                <div>
-                  <div className="text-neutral-900 text-base font-semibold">
-                    점심 세트 프로모션
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="px-2 py-0.5 bg-yellow-50 rounded-[200px] shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] flex justify-center items-center">
-                      <div className="text-center text-yellow-400 text-[10px] font-medium font-['Pretendard'] leading-3 tracking-tight">
-                        ROAS
+            {campaignsLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <div className="animate-spin w-6 h-6 border-2 border-yellow-400 border-t-transparent rounded-full" />
+              </div>
+            ) : campaignsError ? (
+              <div className="text-center py-4">
+                <p className="text-sm text-gray-500">
+                  캠페인 데이터를 불러올 수 없습니다
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {campaigns?.data?.slice(0, 2).map(campaign => (
+                  <div
+                    key={campaign.id}
+                    className="w-80 h-[92px] p-4 bg-gradient-to-r from-yellow-400 to-amber-200/90 rounded-xl shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] relative cursor-pointer hover:opacity-90 transition-opacity"
+                    onClick={() => navigate(`/campaigns/${campaign.id}`)}
+                  >
+                    <div>
+                      <div className="text-neutral-900 text-base font-semibold">
+                        {campaign.name}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="px-2 py-0.5 bg-yellow-50 rounded-[200px] shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] flex justify-center items-center">
+                          <div className="text-center text-yellow-400 text-[10px] font-medium font-['Pretendard'] leading-3 tracking-tight">
+                            ROAS
+                          </div>
+                        </div>
+                        <div className="text-white text-[28px] font-bold">
+                          {Math.round(campaign.roas)}%
+                        </div>
                       </div>
                     </div>
-                    <div className="text-white text-[28px] font-bold">328%</div>
+                    <img
+                      src={getChannelIcon(campaign.channel)}
+                      alt={getChannelName(campaign.channel)}
+                      className="w-8 h-8 absolute bottom-4 right-4"
+                    />
                   </div>
-                </div>
-                <img
-                  src={facebookSvg}
-                  alt="Facebook"
-                  className="w-8 h-8 absolute bottom-4 right-4"
-                />
-              </div>
+                ))}
 
-              <div className="w-80 h-[92px] p-4 bg-gradient-to-r from-yellow-400 to-amber-200/90 rounded-xl shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] relative">
-                <div>
-                  <div className="text-neutral-900 text-base font-semibold">
-                    신메뉴 런칭 이벤트
+                {(!campaigns?.data || campaigns.data.length === 0) && (
+                  <div className="text-center py-8">
+                    <p className="text-sm text-gray-500">
+                      진행 중인 캠페인이 없습니다
+                    </p>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <div className="px-2 py-0.5 bg-yellow-50 rounded-[200px] shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] flex justify-center items-center">
-                      <div className="text-center text-yellow-400 text-[10px] font-medium font-['Pretendard'] leading-3 tracking-tight">
-                        ROAS
-                      </div>
-                    </div>
-                    <div className="text-white text-[28px] font-bold">145%</div>
-                  </div>
-                </div>
-                <img
-                  src={instagramSvg}
-                  alt="Instagram"
-                  className="w-8 h-8 absolute bottom-4 right-4"
-                />
+                )}
               </div>
-            </div>
+            )}
           </div>
         </div>
 
@@ -351,69 +476,94 @@ const Home: React.FC = () => {
           <div className="p-4">
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-semibold text-gray-900">공지사항</h2>
-              <span className="text-sm text-gray-500">더보기 &gt;</span>
+              <span
+                className="text-sm text-gray-500 cursor-pointer"
+                onClick={() => navigate('/notices')}
+              >
+                더보기 &gt;
+              </span>
             </div>
 
             <p className="flex items-baseline text-md text-gray-900 py-2">
               <span>최신 공지사항</span>
               <span className="ml-1 rounded-full bg-yellow-50 px-2 py-0.5 text-base font-semibold text-red-400">
-                1건
+                {notices?.data?.length || 0}건
               </span>
             </p>
 
-            <button
-              // 실제로는 useNavigate를 사용해 상세 페이지로 이동시킵니다.
-              // onClick={() => navigate('/notices/1')}
-              className="flex w-full items-center gap-4 rounded-xl bg-yellow-50 p-4 text-left shadow-sm transition-colors hover:bg-yellow-100"
-            >
-              {/* 왼쪽 아이콘 */}
-              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-yellow-400">
-                {/* 아이콘 SVG 코드 */}
+            {noticesLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <div className="animate-spin w-6 h-6 border-2 border-yellow-400 border-t-transparent rounded-full" />
+              </div>
+            ) : noticesError ? (
+              <div className="text-center py-4">
+                <p className="text-sm text-gray-500">
+                  공지사항을 불러올 수 없습니다
+                </p>
+              </div>
+            ) : notices?.data && notices.data.length > 0 ? (
+              <button
+                onClick={() => navigate(`/notices/${notices.data[0].id}`)}
+                className="flex w-full items-center gap-4 rounded-xl bg-yellow-50 p-4 text-left shadow-sm transition-colors hover:bg-yellow-100"
+              >
+                {/* 왼쪽 아이콘 */}
+                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-yellow-400">
+                  {/* 아이콘 SVG 코드 */}
+                  <svg
+                    className="h-6 w-6 text-white"
+                    width="21"
+                    height="19"
+                    viewBox="0 0 21 19"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M20.5 9.03418C20.4974 6.54997 18.4842 4.53676 16 4.53418H12.2688C11.9959 4.51824 7.24187 4.18355 2.71469 0.38668C2.26836 0.0118277 1.64529 -0.0705311 1.11689 0.175479C0.588491 0.421489 0.250443 0.95132 0.25 1.53418V16.5342C0.250079 17.1172 0.58799 17.6474 1.11646 17.8936C1.64494 18.1399 2.26823 18.0576 2.71469 17.6826C6.25562 14.7126 9.93344 13.8614 11.5 13.6232V16.597C11.4994 17.099 11.7499 17.5681 12.1675 17.8467L13.1987 18.5339C13.6032 18.8038 14.1134 18.861 14.5676 18.6872C15.0217 18.5134 15.3635 18.1302 15.4844 17.6592L16.5878 13.5004C18.8269 13.2025 20.4995 11.293 20.5 9.03418ZM1.75 16.5276V1.53418C5.76344 4.90074 9.87156 5.75293 11.5 5.96293V12.1017C9.87344 12.3154 5.76625 13.1657 1.75 16.5276ZM14.0312 17.2776V17.2879L13 16.6007V13.5342H15.025L14.0312 17.2776ZM16 12.0342H13V6.03418H16C17.6569 6.03418 19 7.37733 19 9.03418C19 10.691 17.6569 12.0342 16 12.0342Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+
+                {/* 중간 텍스트 영역 */}
+                <div className="flex-1">
+                  <p className="text-[10px] text-gray-500">
+                    공지일{' '}
+                    {new Date(notices.data[0].created_at)
+                      .toLocaleDateString('ko-KR')
+                      .replace(/\./g, '.')}
+                  </p>
+                  <div className="flex items-center gap-1">
+                    <span className="rounded-full bg-red-400 px-1 py-px text-[10px] font-medium text-yellow-50">
+                      N
+                    </span>
+                    <p className="text-base font-semibold text-gray-900">
+                      {notices.data[0].title}
+                    </p>
+                  </div>
+                </div>
+
+                {/* 오른쪽 화살표 아이콘 */}
                 <svg
-                  className="h-6 w-6 text-white"
-                  width="21"
+                  className="h-5 w-5 flex-shrink-0 text-gray-400"
+                  width="18"
                   height="19"
-                  viewBox="0 0 21 19"
+                  viewBox="0 0 18 19"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M20.5 9.03418C20.4974 6.54997 18.4842 4.53676 16 4.53418H12.2688C11.9959 4.51824 7.24187 4.18355 2.71469 0.38668C2.26836 0.0118277 1.64529 -0.0705311 1.11689 0.175479C0.588491 0.421489 0.250443 0.95132 0.25 1.53418V16.5342C0.250079 17.1172 0.58799 17.6474 1.11646 17.8936C1.64494 18.1399 2.26823 18.0576 2.71469 17.6826C6.25562 14.7126 9.93344 13.8614 11.5 13.6232V16.597C11.4994 17.099 11.7499 17.5681 12.1675 17.8467L13.1987 18.5339C13.6032 18.8038 14.1134 18.861 14.5676 18.6872C15.0217 18.5134 15.3635 18.1302 15.4844 17.6592L16.5878 13.5004C18.8269 13.2025 20.4995 11.293 20.5 9.03418ZM1.75 16.5276V1.53418C5.76344 4.90074 9.87156 5.75293 11.5 5.96293V12.1017C9.87344 12.3154 5.76625 13.1657 1.75 16.5276ZM14.0312 17.2776V17.2879L13 16.6007V13.5342H15.025L14.0312 17.2776ZM16 12.0342H13V6.03418H16C17.6569 6.03418 19 7.37733 19 9.03418C19 10.691 17.6569 12.0342 16 12.0342Z"
+                    d="M9.4501 9.78379L6.5251 6.85879C6.3876 6.72129 6.31885 6.54629 6.31885 6.33379C6.31885 6.12129 6.3876 5.94629 6.5251 5.80879C6.6626 5.67129 6.8376 5.60254 7.0501 5.60254C7.2626 5.60254 7.4376 5.67129 7.5751 5.80879L11.0251 9.25879C11.1001 9.33379 11.1532 9.41504 11.1845 9.50254C11.2157 9.59004 11.2313 9.68379 11.2313 9.78379C11.2313 9.88379 11.2157 9.97754 11.1845 10.065C11.1532 10.1525 11.1001 10.2338 11.0251 10.3088L7.5751 13.7588C7.4376 13.8963 7.2626 13.965 7.0501 13.965C6.8376 13.965 6.6626 13.8963 6.5251 13.7588C6.3876 13.6213 6.31885 13.4463 6.31885 13.2338C6.31885 13.0213 6.3876 12.8463 6.5251 12.7088L9.4501 9.78379Z"
                     fill="currentColor"
                   />
                 </svg>
+              </button>
+            ) : (
+              <div className="text-center py-8">
+                <p className="text-sm text-gray-500">공지사항이 없습니다</p>
               </div>
-
-              {/* 중간 텍스트 영역 */}
-              <div className="flex-1">
-                <p className="text-[10px] text-gray-500">공지일 2025.08.01.</p>
-                <div className="flex items-center gap-1">
-                  <span className="rounded-full bg-red-400 px-1 py-px text-[10px] font-medium text-yellow-50">
-                    N
-                  </span>
-                  <p className="text-base font-semibold text-gray-900">
-                    8월 정기 점검 안내
-                  </p>
-                </div>
-              </div>
-
-              {/* 오른쪽 화살표 아이콘 */}
-              <svg
-                className="h-5 w-5 flex-shrink-0 text-gray-400"
-                width="18"
-                height="19"
-                viewBox="0 0 18 19"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M9.4501 9.78379L6.5251 6.85879C6.3876 6.72129 6.31885 6.54629 6.31885 6.33379C6.31885 6.12129 6.3876 5.94629 6.5251 5.80879C6.6626 5.67129 6.8376 5.60254 7.0501 5.60254C7.2626 5.60254 7.4376 5.67129 7.5751 5.80879L11.0251 9.25879C11.1001 9.33379 11.1532 9.41504 11.1845 9.50254C11.2157 9.59004 11.2313 9.68379 11.2313 9.78379C11.2313 9.88379 11.2157 9.97754 11.1845 10.065C11.1532 10.1525 11.1001 10.2338 11.0251 10.3088L7.5751 13.7588C7.4376 13.8963 7.2626 13.965 7.0501 13.965C6.8376 13.965 6.6626 13.8963 6.5251 13.7588C6.3876 13.6213 6.31885 13.4463 6.31885 13.2338C6.31885 13.0213 6.3876 12.8463 6.5251 12.7088L9.4501 9.78379Z"
-                  fill="currentColor"
-                />
-              </svg>
-            </button>
+            )}
           </div>
         </div>
       </div>
