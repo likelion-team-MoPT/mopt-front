@@ -17,7 +17,7 @@ const Header: React.FC<HeaderProps> = ({
   title,
   showBackButton = true,
   showLogo = true,
-  backgroundColor = 'bg-white',
+  backgroundColor = '',
   textColor = 'text-gray-900',
   rightComponent,
   onBackClick,

@@ -29,9 +29,22 @@ import type {
 // AI 인사이트 API
 export const insightsApi = {
   // AI 인사이트 목록 조회
-  getInsights: (kind?: 'new' | 'recommended') => {
-    const params = kind ? `?kind=${kind}` : '';
-    return api.get<any>(`/insights${params}`);
+  getInsights: async (kind?: 'new' | 'recommended') => {
+    const params = kind ? `?status=${kind}` : '';
+    const response = await api.get<{
+      new_strategies?: unknown[];
+      recommended_strategies?: unknown[];
+    }>(`/insights${params}`);
+
+    // API 응답 구조를 프론트엔드가 예상하는 구조로 변환
+    if (kind === 'new') {
+      return { data: response.new_strategies || [] };
+    } else if (kind === 'recommended') {
+      return { data: response.recommended_strategies || [] };
+    } else {
+      // kind가 없으면 전체 응답 반환
+      return response;
+    }
   },
 
   // AI 인사이트 상세 조회
@@ -64,7 +77,9 @@ export const campaignsApi = {
 export const homeApi = {
   // 대시보드 상위 트렌드 키워드 조회
   getTrendKeywords: (region: string, limit: number = 5) =>
-    api.get<TrendKeywordsSchema>(`/home/dashboard?region=${region}&limit=${limit}`),
+    api.get<TrendKeywordsSchema>(
+      `/home/dashboard?region=${region}&limit=${limit}`
+    ),
 };
 
 // 리포트 API
@@ -79,9 +94,11 @@ export const reportsApi = {
     if (params?.period) searchParams.append('period', params.period);
     if (params?.startDate) searchParams.append('startDate', params.startDate);
     if (params?.endDate) searchParams.append('endDate', params.endDate);
-    
+
     const queryString = searchParams.toString();
-    return api.get<TotalReportOut>(`/reports/${queryString ? `?${queryString}` : ''}`);
+    return api.get<TotalReportOut>(
+      `/reports/${queryString ? `?${queryString}` : ''}`
+    );
   },
 
   // KPI 리포트 조회
@@ -94,9 +111,11 @@ export const reportsApi = {
     if (params?.period) searchParams.append('period', params.period);
     if (params?.startDate) searchParams.append('startDate', params.startDate);
     if (params?.endDate) searchParams.append('endDate', params.endDate);
-    
+
     const queryString = searchParams.toString();
-    return api.get<KpiReportOut>(`/reports/kpi${queryString ? `?${queryString}` : ''}`);
+    return api.get<KpiReportOut>(
+      `/reports/kpi${queryString ? `?${queryString}` : ''}`
+    );
   },
 
   // 채널별 리포트 조회
@@ -109,9 +128,11 @@ export const reportsApi = {
     if (params?.period) searchParams.append('period', params.period);
     if (params?.startDate) searchParams.append('startDate', params.startDate);
     if (params?.endDate) searchParams.append('endDate', params.endDate);
-    
+
     const queryString = searchParams.toString();
-    return api.get<ChannelReportOut[]>(`/reports/channel${queryString ? `?${queryString}` : ''}`);
+    return api.get<ChannelReportOut[]>(
+      `/reports/channel${queryString ? `?${queryString}` : ''}`
+    );
   },
 
   // 캠페인별 리포트 조회
@@ -128,9 +149,11 @@ export const reportsApi = {
     if (params?.endDate) searchParams.append('endDate', params.endDate);
     if (params?.sort) searchParams.append('sort', params.sort);
     if (params?.limit) searchParams.append('limit', params.limit.toString());
-    
+
     const queryString = searchParams.toString();
-    return api.get<CampaignReportOut[]>(`/reports/campaign${queryString ? `?${queryString}` : ''}`);
+    return api.get<CampaignReportOut[]>(
+      `/reports/campaign${queryString ? `?${queryString}` : ''}`
+    );
   },
 };
 
@@ -142,7 +165,9 @@ export const usersApi = {
 
   // 사용자 연결 해제
   disconnectUserIntegration: (userId: number, integrationId: string) =>
-    api.delete<IntegrationDisconnectedOut[]>(`/users/${userId}/integrations/${integrationId}`),
+    api.delete<IntegrationDisconnectedOut[]>(
+      `/users/${userId}/integrations/${integrationId}`
+    ),
 
   // 사용자 프로필 조회
   getUserProfile: (userId: number) =>
@@ -158,7 +183,10 @@ export const usersApi = {
 
   // 알림 설정 수정
   updateNotificationSettings: (userId: number, data: NotificationSettingsIn) =>
-    api.put<NotificationSettingsOut>(`/users/${userId}/settings/notifications`, data),
+    api.put<NotificationSettingsOut>(
+      `/users/${userId}/settings/notifications`,
+      data
+    ),
 
   // 구독 정보 조회
   getSubscription: (userId: number) =>
@@ -174,7 +202,9 @@ export const usersApi = {
 
   // 공지사항 목록 조회
   getUserNotices: (userId: number, page: number = 1, limit: number = 6) =>
-    api.get<NoticeListOut>(`/users/${userId}/notices?page=${page}&limit=${limit}`),
+    api.get<NoticeListOut>(
+      `/users/${userId}/notices?page=${page}&limit=${limit}`
+    ),
 
   // 공지사항 상세 조회
   getNoticeDetail: (userId: number, noticeId: string) =>
