@@ -33,7 +33,9 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <div className={`flex items-center justify-between px-4 py-4 ${backgroundColor}`}>
+    <div
+      className={`flex items-center justify-between px-4 py-4 ${backgroundColor}`}
+    >
       {showBackButton ? (
         <button
           onClick={handleBackClick}
@@ -44,14 +46,14 @@ const Header: React.FC<HeaderProps> = ({
       ) : (
         <div className="w-8 h-8" />
       )}
-      
+
       <h1 className={`text-lg font-semibold ${textColor}`}>{title}</h1>
-      
+
       <div className="w-8 h-8 flex items-center justify-center">
         {rightComponent ? (
           rightComponent
         ) : showLogo ? (
-          <img src={iconSvg} alt="MoPT Logo" className="w-6 h-6" />
+          <img src={iconSvg} alt="MoPT Logo" className="w-8 h-8" />
         ) : null}
       </div>
     </div>

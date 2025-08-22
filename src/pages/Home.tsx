@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Layout, FeatureIcon, Loading } from '../components/common';
+import WeeklySalesChart from '../components/home/WeeklySalesChart';
 import {
   useTrendKeywords,
   useTotalReport,
@@ -96,6 +97,23 @@ const Home: React.FC = () => {
       default:
         return channel;
     }
+  };
+
+  // 주간 매출 차트 데이터 생성 함수
+  const generateWeeklySalesData = () => {
+    // 샘플 데이터 (실제 일별 매출 데이터가 없으므로)
+    const baseSales = totalReport?.total_sales || 10000000;
+    const dailyVariation = [0.8, 0.6, 0.9, 0.7, 1.2, 1.4, 1.1]; // 요일별 변동률
+
+    return [
+      { day: '월', sales: Math.round((baseSales / 7) * dailyVariation[0]) },
+      { day: '화', sales: Math.round((baseSales / 7) * dailyVariation[1]) },
+      { day: '수', sales: Math.round((baseSales / 7) * dailyVariation[2]) },
+      { day: '목', sales: Math.round((baseSales / 7) * dailyVariation[3]) },
+      { day: '금', sales: Math.round((baseSales / 7) * dailyVariation[4]) },
+      { day: '토', sales: Math.round((baseSales / 7) * dailyVariation[5]) },
+      { day: '일', sales: Math.round((baseSales / 7) * dailyVariation[6]) },
+    ];
   };
 
   return (
@@ -194,14 +212,12 @@ const Home: React.FC = () => {
               </div>
             ) : (
               <>
-                <div className="flex items-end mb-2">
+                <div className="flex items-center justify-between mb-4">
                   <span className="text-2xl font-bold text-gray-900">
                     {totalReport
                       ? formatCurrency(totalReport.total_sales)
                       : '₩0'}
                   </span>
-                </div>
-                <div className="flex items-center">
                   <span className="text-sm">
                     <span className="text-gray-500">이번 주 </span>
                     <span className="text-blue-600">
@@ -212,16 +228,11 @@ const Home: React.FC = () => {
                         : '+0%'}
                     </span>
                   </span>
-                  <div className="ml-2 h-8 flex-1 bg-gray-100 rounded relative overflow-hidden">
-                    <div
-                      className="absolute inset-0 bg-yellow-400 rounded"
-                      style={{
-                        width: totalReport?.overall_roas
-                          ? `${Math.min(totalReport.overall_roas / 5, 100)}%`
-                          : '0%',
-                      }}
-                    ></div>
-                  </div>
+                </div>
+
+                {/* 주간 매출 차트 */}
+                <div className="mt-4">
+                  <WeeklySalesChart data={generateWeeklySalesData()} />
                 </div>
               </>
             )}
@@ -518,7 +529,10 @@ const Home: React.FC = () => {
                 {/* 중간 텍스트 영역 */}
                 <div className="flex-1">
                   <p className="text-[10px] text-gray-500">
-                    공지일 {new Date(notices.data[0].created_at).toLocaleDateString('ko-KR').replace(/\./g, '.')}
+                    공지일{' '}
+                    {new Date(notices.data[0].created_at)
+                      .toLocaleDateString('ko-KR')
+                      .replace(/\./g, '.')}
                   </p>
                   <div className="flex items-center gap-1">
                     <span className="rounded-full bg-red-400 px-1 py-px text-[10px] font-medium text-yellow-50">
@@ -547,9 +561,7 @@ const Home: React.FC = () => {
               </button>
             ) : (
               <div className="text-center py-8">
-                <p className="text-sm text-gray-500">
-                  공지사항이 없습니다
-                </p>
+                <p className="text-sm text-gray-500">공지사항이 없습니다</p>
               </div>
             )}
           </div>
