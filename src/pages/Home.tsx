@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Layout, FeatureIcon, Loading } from '../components/common';
+import { Layout, FeatureIcon } from '../components/common';
 import WeeklySalesChart from '../components/home/WeeklySalesChart';
 import {
   useTrendKeywords,
@@ -268,7 +268,7 @@ const Home: React.FC = () => {
                 <p className="flex items-baseline text-md text-gray-900 py-2">
                   <span>새로운 AI 추천 전략 </span>
                   <span className="ml-1 rounded-full bg-yellow-50 px-2 py-0.5 text-base font-semibold text-red-400">
-                    {insights?.data?.length || 0}건
+                    {(insights && 'data' in insights ? insights.data?.length : 0) || 0}건
                   </span>
                 </p>
 
@@ -279,10 +279,10 @@ const Home: React.FC = () => {
                 </div>
 
                 <div className="w-full p-4 bg-yellow-50 rounded-xl shadow-[0px_1px_3px_0px_rgba(18,18,18,0.08)] flex flex-col gap-2">
-                  {insights?.data && insights.data.length > 0 ? (
+                  {insights && 'data' in insights && insights.data && insights.data.length > 0 ? (
                     insights.data
                       .slice(0, 3)
-                      .map((insight: any, index: number) => (
+                      .map((insight: any) => (
                         <div key={insight.id} className="flex flex-col gap-1">
                           <div className="flex items-center gap-1">
                             <div className="text-neutral-500 text-[10px] font-medium leading-3 tracking-tight">

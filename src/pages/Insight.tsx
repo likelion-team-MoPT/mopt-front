@@ -108,13 +108,13 @@ const Insight: React.FC = () => {
                   새로운 AI 추천 전략
                 </h2>
                 <p className="text-[#121212] text-xs font-medium leading-[150%]">
-                  총 <span className="text-[#3892E3] font-bold">{newInsights?.data?.length || 0}</span>건
+                  총 <span className="text-[#3892E3] font-bold">{(newInsights && 'data' in newInsights ? newInsights.data?.length : 0) || 0}</span>건
                 </p>
               </div>
 
               {/* 카드 리스트 */}
               <div className="flex flex-col gap-2">
-                {newInsights?.data && newInsights.data.length > 0 ? (
+                {newInsights && 'data' in newInsights && newInsights.data && newInsights.data.length > 0 ? (
                   newInsights.data.map((strategy: any) => (
                     <div 
                       key={strategy.id} 
@@ -163,7 +163,7 @@ const Insight: React.FC = () => {
               
               {/* 모든 카드를 감싸는 외부 컨테이너를 추가 */}
               <div className="bg-[#FFFEFB] rounded-2xl p-2 shadow-[0_1px_3px_0_rgba(18,18,18,0.08)]">
-                {recommendedInsights?.data && recommendedInsights.data.length > 0 ? (
+                {recommendedInsights && 'data' in recommendedInsights && recommendedInsights.data && recommendedInsights.data.length > 0 ? (
                   <div className="divide-y divide-gray-100">
                     {recommendedInsights.data.map((strategy: any) => (
                       <div 
